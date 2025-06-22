@@ -1,2 +1,2 @@
 # jm_utils
-a Package
+- Utilities I use frequently
