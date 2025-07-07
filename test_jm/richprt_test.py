@@ -1,21 +1,5 @@
-'''
-jm_richprt
-'''
-# copilot
-
-__version__ = "0.1.0"
-__description__ = "Utilities I use frequently - Several modules"
-__author__ = "Jorge Monti"
-__email__ = "jorgitomonti@gmail.com"
-__license__ = "MIT"
-__status__ = "Development"
-__python_requires__ = ">=3.11"
-__last_modified__ = "2025-06-15"
-
-
 # Standard Libs
 from datetime import datetime
-import re
 
 # Third-Party Libs
 from rich.console import Console
@@ -74,22 +58,38 @@ def prt_state(state='info', msg='Default message', color='white', mark='?'):
     default = [mark, color, color, color]
 
     txt = Text(mark_colors.get(state, default)[0], style=mark_colors.get(state, default)[1])
-    txt.append(f" [{state.upper()}] >", style=mark_colors.get(state, default)[2])
+    txt.append(f" [{state.upper()}] -", style=mark_colors.get(state, default)[2])
     txt.append(f" {msg} ", style=mark_colors.get(state, default)[3])
 
     console.print(txt)
 
 
-def prt_string(msg='Default message', color='cyan', fmt_numbers=False):
+def prt_prg_title0(prg, title, fmt_title=False, log='',
+                   colors=['green', 'magenta', 'yellow', 'cyan']):
+    ''' Prints a title with the program name, title, and log information.
+        prg: Program name
+        title: Title of the section
+        log: Log information (default is 'No log')
+    '''
 
-    string = str(msg)
-    if fmt_numbers:
-        string = fmt_nums(string)
+    timestamp = datetime.now().strftime('%b %d %H:%M:%S')
+   
+    if fmt_title:
+        title = title.title()
 
-    txt = Text(string, style=color)
+    txt = Text(f"{timestamp} > ", style=colors[0])
+    txt.append('Iniciando la ejecución de: ', style='white')
+    txt.append(f"{prg} \n", style=colors[1])
+    txt.append(f">>>  {title}  <<<", style=colors[3])
+
+    if log:
+        txt.append('\n\t\t> ', style=colors[0])
+        txt.append('Log: ', style='white')
+        txt.append(f"{log} \n", colors[2])
+
     console.print(txt)
 
-
+    
 def prt_prg_title(prg, title, fmt_title=False, log='', version=1,
                   colors=['green', 'magenta', 'yellow', 'cyan']):
     """
@@ -173,54 +173,21 @@ def prt_prg_title(prg, title, fmt_title=False, log='', version=1,
     console.print(txt)
 
 
-def enter_to_continue(msg='Press Enter to continue...'):
-    ''' Custom input function to pause execution and wait for user input.
-        msg: Message to display (default is 'Press Enter to continue...')
-    '''
-    console.input(f"\n[bold blue]{msg}[/bold blue]")
-
-
-# Next 3 functions make the recursive fmt_nums() - Format Numbers - function
-def fmt_num(value, decimals=2, miles=',') -> str:
-    try:
-        num = float(value)                                  # Convert to float if possible
-        if miles:
-            return f"{num:>{miles}.{decimals}f}"     
-        else:
-            return f"{num:>.{decimals}f}"
-        
-    except (ValueError, TypeError) as e:                          
-        return f"[ERROR] Al tratar de 'float({value})' - {e}"   
-    
-    
-def fmt_num_in_str(text, decimals=2, miles=','):
-    """Search and format numbers within a string."""
-    def _replace(match):
-        number = float(match.group(0))
-        return fmt_num(number, decimals, miles)
-    
-    pattern = r"[-+]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?"
-    return re.sub(pattern, _replace, text)
-
-
-def fmt_nums(value, decimals=2, miles=','):     # a recursive function for collections
-    try:
-        value = float(value)
-    except:
-        if isinstance(value, list):
-            return [fmt_nums(element, decimals, miles) for element in value]
-        if isinstance(value, list):
-            return tuple([fmt_nums(element, decimals, miles) for element in value])
-        elif isinstance(value, dict):
-            return {k: fmt_nums(v, decimals, miles) for k, v in value.items()}
-        elif isinstance(value, str):
-            return fmt_num_in_str(value, decimals, miles)
-        
-    else:
-        return fmt_num(value, decimals, miles)
-
-
-
 if __name__ == '__main__':
-    pass
+    
+    # # prt_state()
+    # for state in ('info', 'ok', 'warning', 'error'):
+    #     msg = f"Este es un mensaje de __{state}__\n"
+    #     prt_state(state=state, msg=msg)
+
+    # # prt_prg_title0()
+    # prt_prg_title0('odbcinfo', 'Controladores ODBC instalados en su sistema', fmt_title=True, log='odbcinfo.log')
+ 
+    # prt_prg_title()
+    # prt_prg_title('odbcinfo', 'Controladores ODBC instalados en su sistema', fmt_title=True, log='odbcinfo.log')
+    prt_prg_title('odbcinfo', 'Controladores ODBC instalados en su sistema', fmt_title=True)
+
+    print('aca empieza los msgcvcv')
+    print('## 2.- aca empieza los msgcvcv')
+    input('.....')
 
