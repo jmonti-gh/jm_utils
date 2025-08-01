@@ -4,10 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jm_utils"
-dynamic = ["description", "version", ]
+dynamic = ["version"]
 authors = [
     {name = "Jorge Monti", email = "jorgitomonti@gmail.com"}
 ]
+description = "Utilities for pandas, numpy, matplotlib, etc."
 license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.11"
@@ -32,10 +33,9 @@ dependencies = [
     "Pillow>=10.3.0",       # for images
 ]
 
-# [tool.setuptools.dynamic]
-# description = {file = ["README.md"]}
-# version = {attr = "jm_utils.__version__"}
-
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["jm_utils*"]
+
+[tool.setuptools_scm]
+version_file = "jm_utils/__init__.py"
