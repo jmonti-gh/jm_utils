@@ -45,3 +45,4 @@ allow-direct-references = true
 
 ## jm- Probar los pyproject.toml
 # python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb')))"
+# gemini - copilot
