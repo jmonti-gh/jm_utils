@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling>=1.20.0", "hatch-vcs>=0.3.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "jm_utils"
+authors = [
+    {name = "Jorge Monti", email = "jorgitomonti@gmail.com"}
+]
+description = "Utilities for pandas, numpy, matplotlib, etc."
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+keywords = ["utils", "utilities", "pandas", "numpy", "datetime", "matplotlib", "data"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "rich>=13.0",
+    "numpy>=1.26.4",
+    "pandas>=2.2.2",
+    "matplotlib>=3.8.4",
+    "seaborn>=0.13.2",
+    "Pillow>=10.3.0",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/jorgitomonti/jm_utils" # Reemplaza con la URL de tu repositorio
+Documentation = "https://jm_utils.readthedocs.io/" # Reemplaza con la URL de tu documentación
+Issues = "https://github.com/jorgitomonti/jm_utils/issues" # Reemplaza con la URL de los issues
+
+[tool.hatch.version]
+path = "jm_utils/__init__.py"
+
+[tool.hatch.build]
+hooks = ["hatch_vcs"]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/jm_utils/tests" # Ejemplo de cómo excluir directorios del paquete fuente
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["jm_utils"]

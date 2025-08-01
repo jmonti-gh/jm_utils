@@ -1,12 +1,9 @@
 [build-system]
 requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
-# requires = ["hatchling"]
-# build-backend = "hatchling.build"
 
 [project]
 name = "jm_utils"
-# dynamic = ["authors", "description", "version", ]
 dynamic = ["description", "version", ]
 authors = [
     {name = "Jorge Monti", email = "jorgitomonti@gmail.com"}
@@ -14,7 +11,7 @@ authors = [
 license = {text = "MIT"}
 readme = "README.md"
 requires-python = ">=3.11"
-keywords = ["utils", "utilities", "pandas", "numpy", "datetime"]
+keywords = ["utils", "utilities", "pandas", "numpy", "datetime", "matplotlib", "data"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: End Users/Desktop",
@@ -26,23 +23,19 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Utilities",
 ]
+dependencies = [
+    "rich>=13.0",           
+    "numpy>=1.26.4",    
+    "pandas>=2.2.2",     
+    "matplotlib>=3.8.4", 
+    "seaborn>=0.13.2",   
+    "Pillow>=10.3.0",       # for images
+]
 
-[tool.setuptools.dynamic]
-# authors = {attr = "jm_utils.__authors__"}
-# authors = {file = ["AUTHORS.txt"]}
-description = {file = ["README.md"]}
-version = {attr = "jm_utils.__version__"}
+# [tool.setuptools.dynamic]
+# description = {file = ["README.md"]}
+# version = {attr = "jm_utils.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["jm_utils*"]
-
-[tool.hatch.version]
-path = "jm_utils/__init__.py"
-
-[tool.hatch.metadata]
-allow-direct-references = true
-
-## jm- Probar los pyproject.toml
-# python -c "import tomllib; print(tomllib.load(open('pyproject.toml', 'rb')))"
-# gemini - copilot
