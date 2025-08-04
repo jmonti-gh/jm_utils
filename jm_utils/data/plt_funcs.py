@@ -29,7 +29,7 @@ from matplotlib.ticker import PercentFormatter  # for pareto chart and ?
 import seaborn as sns
 
 # Local Libs
-from jm_utils.data.pd_functs import to_series, get_fdt
+from jm_utils.data.pd_funcs import to_series, get_fdt
 
 ## Custom types for non-included typing annotations
 IndexElement: TypeAlias = Union[str, int, float, pd.Timestamp]
@@ -235,7 +235,91 @@ def ax_plt_pie(
     legends_title: Optional[str] = None,
     show_stats_subtitle = True
 ) -> plt.Axes:
+    """
+    Plots a pie or donut chart on a given matplotlib Axes with advanced label and layout options.
 
+    This function is designed to be used internally or within subplot grids. It draws a pie or donut
+    chart on a pre-existing Axes object, allowing for integration into complex figure layouts.
+
+    Parameters:
+        ax (plt.Axes): The matplotlib Axes object on which to draw the chart.
+
+        data (Union[pd.Series, np.ndarray, dict, list, set, pd.DataFrame]): Input data.
+            Will be converted to a frequency distribution using `get_fdt`.
+
+        value_counts (bool, optional): If True, computes frequency counts of raw data.
+            Default is False.
+
+        dropna (bool, optional): If True, excludes NaN values from the chart.
+            If False, includes NaN as a category. Default is True.
+
+        order (str, optional): Sorting order for categories:
+            - 'desc': descending by frequency.
+            - 'asc': ascending by frequency.
+            - 'ix_asc': ascending by index.
+            - 'ix_desc': descending by index.
+            Default is 'desc'.
+
+        scale (int, optional): Scaling factor (1 to 16) affecting font sizes.
+            Larger values produce larger text. Default is 1.
+
+        title (str, optional): Chart title. If not provided, a default title is generated.
+
+        kind (str, optional): Type of chart:
+            - 'pie': standard pie chart.
+            - 'donut': donut chart with a hole in the center.
+            Default is 'pie'.
+
+        pct_label_place (str, optional): Placement and style of labels:
+            - 'ext': external labels with arrows.
+            - 'mix': internal percentages and absolute values, labels outside.
+            - 'mixlgd': internal values, legend with labels.
+            - 'apart': no internal labels, full details in legend.
+            Default is 'ext'.
+
+        palette (list, optional): List of colors or a named palette (e.g., 'colorblind').
+            If None, defaults to a standard palette.
+
+        startangle (float, optional): Starting angle in degrees for the first wedge.
+            Default is 90 (top, vertical).
+
+        pct_decimals (int, optional): Number of decimal places in percentage labels.
+            Default is 1.
+
+        labels_rotate (float, optional): Rotation angle for internal labels.
+            Default is 0.
+
+        labels_color (str, optional): Color for internal text labels.
+            Default is 'black'.
+
+        legends_loc (str, optional): Position of the legend (e.g., 'best', 'upper right').
+            Default is 'best'.
+
+        legends_title (str, optional): Title for the legend.
+            Default is None.
+
+        show_stats_subtitle (bool, optional): If True, adds a subtitle with summary statistics:
+            total count, number of categories, contribution of top 2, and null count.
+            Default is True.
+
+    Returns:
+        plt.Axes: The modified Axes object with the pie/donut chart drawn.
+
+    Raises:
+        ValueError: If `kind` is not 'pie' or 'donut', or if more than 12 categories are provided.
+        ValueError: If `scale` is not between 1 and 16.
+        ValueError: If `pct_label_place` is invalid.
+
+    Notes:
+        - This function uses `get_fdt` to compute the frequency distribution table.
+        - NaN handling is flexible: can be included, excluded, or sorted with values.
+        - Designed for reuse and integration into larger figures.
+
+    Example:
+        >>> fig, ax = plt.subplots()
+        >>> ax_plt_pie(ax, data, kind='donut', pct_label_place='mixlgd')
+        >>> plt.show()
+    """
     # Get the data to graph: use controls and processing that get_fdt() does to obtain the series to graph (first column: 'Frequency')
     fdt = get_fdt(data, value_counts=value_counts, order=order,
                   dropna=False, na_position='value', na_aside_calc=False, include_flat_relatives=False, include_pcts=False)
@@ -285,9 +369,9 @@ def ax_plt_pie(
 
     # Configure wedge properties for donut or pie chart
     if kind.lower() == 'donut':
-        wedgeprops = {'width': 0.55, 'edgecolor': 'white', 'linewidth': 1}
+        wedgeprops = {'width': 0.55, 'edgecolor': 'white', 'linewidth': 0.6}
     else:
-        wedgeprops = {'edgecolor': 'white', 'linewidth': 0.5}
+        wedgeprops = {'edgecolor': 'white', 'linewidth': 0.3}
 
     # Define colors
     if palette:
@@ -355,7 +439,7 @@ def ax_plt_pie(
                textprops={'size': labels_size,
                         'color': labels_color,
                         'rotation': labels_rotate,
-                        'weight': 'bold'})
+                        'weight': 'medium'})
         
         # Legends only in case of 'mixlgd' or 'apart'
         if pct_label_place == 'mixlgd' or pct_label_place == 'apart':
@@ -410,7 +494,74 @@ def plt_pie(
     legends_title: Optional[str] = None,
     show_stats_subtitle = True   
 ) -> tuple[plt.Figure, plt.Axes]:
-    
+    """
+    Creates a pie or donut chart with customizable layout, labels, and styling.
+
+    This high-level function generates a complete pie or donut chart figure. It is ideal for
+    standalone visualizations and quick data exploration. Internally, it uses `ax_plt_pie`
+    to draw the chart on a newly created Axes.
+
+    Parameters:
+        data (Union[pd.Series, np.ndarray, dict, list, set, pd.DataFrame]): Input data.
+            If not a Series, it will be converted using `to_series`.
+
+        value_counts (bool, optional): If True, computes frequency counts of raw data.
+            Default is False.
+
+        dropna (bool, optional): If True, excludes NaN values from the chart.
+            If False, includes NaN as a category. Default is True.
+
+        order (str, optional): Sorting order for categories (see `ax_plt_pie`).
+            Default is 'desc'.
+
+        scale (int, optional): Scaling factor (1 to 16) affecting figure and font sizes.
+            Default is 1.
+
+        figsize (tuple, optional): Width and height of the figure in inches.
+            If not provided, size is calculated from `scale`.
+
+        title (str, optional): Chart title. If not provided, a default title is generated.
+
+        kind (str, optional): Type of chart: 'pie' or 'donut'. Default is 'pie'.
+
+        pct_label_place (str, optional): Label placement strategy (see `ax_plt_pie`).
+            Default is 'mix'.
+
+        palette (list, optional): Color palette to use. Default is None.
+
+        startangle (float, optional): Starting angle for the first wedge. Default is 90.
+
+        pct_decimals (int, optional): Decimal places in percentage labels. Default is 1.
+
+        labels_rotate (float, optional): Rotation for internal labels. Default is 0.
+
+        labels_color (str, optional): Color for internal text. Default is 'black'.
+
+        legends_loc (str, optional): Legend position. Default is 'best'.
+
+        legends_title (str, optional): Title for the legend. Default is None.
+
+        show_stats_subtitle (bool, optional): If True, displays a subtitle with key statistics.
+            Default is True.
+
+    Returns:
+        tuple[plt.Figure, plt.Axes]: A tuple containing:
+            - fig: The matplotlib Figure object.
+            - ax: The Axes object with the chart.
+
+    Raises:
+        ValueError: If `scale` is not between 1 and 16.
+        ValueError: If `kind` or `pct_label_place` are invalid (delegated to `ax_plt_pie`).
+
+    Notes:
+        - This function is a wrapper around `ax_plt_pie`, providing a simple interface
+          for creating full figures.
+        - Ideal for interactive use, reports, and exploratory data analysis.
+
+    Example:
+        >>> fig, ax = plt_pie(data, kind='donut', title='Distribution of Categories')
+        >>> plt.show()
+    """
     # Build graphs size, and fonts size from scale, and validate scale.
     if scale < 1 or scale > 16:
         raise ValueError(f"[ERROR] Invalid 'scale' value. Must between '1' and '16', not '{scale}'.")
@@ -420,7 +571,7 @@ def plt_pie(
     # Calculate figure dimensions
     if figsize is None:
         multiplier = scale + 5
-        w_base, h_base = 1.25, 0.7
+        w_base, h_base = 1.1, 0.6
         width, height = w_base * multiplier, h_base * multiplier
         figsize = (width, height)
     else:
