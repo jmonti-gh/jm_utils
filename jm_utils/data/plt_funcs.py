@@ -216,7 +216,227 @@ def show_plt_palettes(
     return fig                  # Return the current figure for further manipulation if needed
 
 
+def ax_plt_pie(
+    ax: plt.Axes,
+    data: Union[pd.Series, np.ndarray, dict, list, set, pd.DataFrame],
+    value_counts: Optional[bool] = False,
+    dropna: Optional[bool] = True,
+    order: Optional[str] = 'desc',
+    scale: Optional[int] = 1,
+    title: Optional[str] = None,
+    kind: Optional[str] = 'pie',
+    pct_label_place: Optional[str] = 'ext',     # mix, mixlgd, apart, ext
+    palette: Optional[list] = 'colorblind',
+    startangle: Optional[float] = 90,
+    pct_decimals: Optional[int] = 1,
+    labels_rotate: Optional[float] = 0,
+    labels_color: Optional[str] = 'black',
+    legends_loc: Optional[str] = 'best',
+    legends_title: Optional[str] = None,
+    show_stats_subtitle = True
+) -> plt.Axes:
+
+    # Get the data to graph: use controls and processing that get_fdt() does to obtain the series to graph (first column: 'Frequency')
+    fdt = get_fdt(data, value_counts=value_counts, order=order,
+                  dropna=False, na_position='value', na_aside_calc=False, include_flat_relatives=False, include_pcts=False)
+        # - dropna=False            -> So that it doesn't remove NaNs, and then handle them
+        # - na_aside_calc=False     -> So that it allows me to sort the nan value with na_position='value'
+        # - na_position='value'     -> So that it allows me to sort the nan value within the list of values either desc or asc (according to order)
+        # - We do not include relative flat rates or percentages. We calculate the percentages before presenting them.
+
+    # cat_name: lo puedo usar luego in title y en legend titel
+    cat_name = fdt.index.name                       # Category name <- from fdt.index.name (could be 'Index' Warn!)
+
+    sr = fdt.iloc[:, 0]                             # Get the Series with the frequencies (count)
+    # As sr.index build the legends: If I want to change the legends, I'll have to see how I modify this sr.index (must be done previously of run this funct)
+         
+    # Handling of nans since they are presented in the subtitle, whether or not they appear in the graph
+    total_label = "Total (w/nulls)"                # total_label to be presented in subtitle (inital value w/nulls)
+    
+    if pd.isna(sr.index).any():                     # There is np.nan [NaN] index, nans values
+        n_nans = sr[np.nan]
+        if dropna:                                  # No NaNs in the graph
+            sr = sr.drop(np.nan, errors='ignore')   # Drop NaN row from the DataFrame
+            total_label = "Total (wo/nulls)"       # The total will be calculated wo/NaNs (likewise, n_nans will appear in the subtitle.)
+    else:                                           # No np.nan row
+        n_nans = 0
+
+    # Validate kind parameter
+    if kind.lower() not in ['pie', 'donut']:
+        raise ValueError(f"Invalid 'kind' parameter: '{kind}'. Must be 'pie' or 'donut'.")
+    
+    # Validate maximum categories
+    if len(sr) > 12:
+        raise ValueError(f"Data contains {len(sr)} categories. "
+                        "Maximum allowed is 12 categories.")
+    
+    # Build graphs size, and fonts size from scale, and validate scale from 1 to 9.
+    if scale < 1 or scale > 16:
+        raise ValueError(f"[ERROR] Invalid 'scale' value. Must between '1' and '16', not '{scale}'.")
+    else:
+        scale = round(scale)
+
+    ## OJO! possible need to validate a lot of other parameters
+    
+    # Calculate font sizes based scale
+    multiplier= scale + 5
+    labels_size = multiplier * 1.1
+    title_size = multiplier * 1.6
+
+    # Configure wedge properties for donut or pie chart
+    if kind.lower() == 'donut':
+        wedgeprops = {'width': 0.55, 'edgecolor': 'white', 'linewidth': 1}
+    else:
+        wedgeprops = {'edgecolor': 'white', 'linewidth': 0.5}
+
+    # Define colors
+    if palette:
+        color_list = get_color_list(palette, len(sr))
+    else:
+        color_list = None
+
+    # Build the different pies according pct_label_place. Previous get the total = frequencies sum
+    total = sr.sum()
+
+    if pct_label_place == 'ext':                                # External pct and labels using ax.annotate()
+
+        wedges, _ = ax.pie(sr, wedgeprops=wedgeprops, colors=color_list, startangle=startangle)
+
+        bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+        kw = dict(arrowprops=dict(arrowstyle="-"), bbox=bbox_props, zorder=0, va="center")
+
+        # Build the labels. Annotations and legend in same label (External)
+        labels = [
+            f"{sr.loc[sr == value].index[0]}\n{value:,}\n({round(value / total * 100, pct_decimals)} %)"
+            for value in sr.values
+        ]
+        
+        # Draw the annotations (labels)
+        for i, p in enumerate(wedges):
+            ang = (p.theta2 - p.theta1)/2. + p.theta1
+            y = np.sin(np.deg2rad(ang))
+            x = np.cos(np.deg2rad(ang))
+            horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+            connectionstyle = f"angle,angleA=0,angleB={ang}"
+            kw["arrowprops"].update({"connectionstyle": connectionstyle})
+            ax.annotate(labels[i], xy=(x, y), xytext=(1.1*np.sign(x), 1.1*y),
+                    horizontalalignment=horizontalalignment, fontsize=labels_size, **kw)
+            
+    elif pct_label_place == 'mix' or pct_label_place == 'mixlgd' or pct_label_place == 'apart':
+        # Initlal values for some varibales to use in this section
+        labels = None                   # Labels will only exist for the 'mix' case. Other cases None (labels in legends or 'ext')
+        legends_size = labels_size        # It allows me to change the size of the legend other than the label.
+        
+        # Set autopct: for 'mix' and 'mixlgd' internal w/ absolute and pcts. Others None (all info outside the chart)
+        if pct_label_place == 'mix' or pct_label_place == 'mixlgd':
+            
+            def _make_autopct(values):             # A python Closure
+                value_iterator = iter(values)    
+                def my_autopct(pct):
+                    return f"{next(value_iterator):,}\n{pct:.{pct_decimals}f}%"  
+                return my_autopct
+            
+            autopct_func = _make_autopct(sr.values)
+
+            # Set labels props for 'mix'. The only case labels differento to None
+            if pct_label_place == 'mix':
+                labels = sr.index
+
+        else:                       # elif apart
+            autopct_func = None     # No data inside de pie or donut
+
+        # Build the graph
+        ax.pie(x=sr,
+               colors=color_list,
+               labels=labels,
+               startangle=startangle,
+               autopct=autopct_func,
+               wedgeprops=wedgeprops,
+               textprops={'size': labels_size,
+                        'color': labels_color,
+                        'rotation': labels_rotate,
+                        'weight': 'bold'})
+        
+        # Legends only in case of 'mixlgd' or 'apart'
+        if pct_label_place == 'mixlgd' or pct_label_place == 'apart':
+            if pct_label_place == 'mixlgd':
+                legends = sr.index
+            else:                    # elif apart: all the info (pcts, labels, cat_names) in the legends
+                legends = [f"{sr.index[i]} \n| {value:,} | {round(value / total * 100, pct_decimals)} %"
+                           for i, value in enumerate(sr.values)] 
+        
+            ax.legend(legends,
+                      title=legends_title,
+                      title_fontproperties = {'size':legends_size, 'weight': 'bold'},
+                      loc=legends_loc,
+                    #   bbox_to_anchor=(1, 0, 0.2, 1),
+                      bbox_to_anchor=(1, 0.9),
+                      prop={'size': legends_size})
+
+    else:
+        raise ValueError(f"Invalid labe_place parameter. Must be 'mix, 'mixlgd', 'ext' or 'aoart', not '{pct_label_place}'.")
+            
+    # Build title and set title
+    if not title:
+        title = f"Pie/Donut Chart ({cat_name} - {sr.name})"
+    ax.set_title(title, fontsize=title_size, fontweight='bold')
+
+    if show_stats_subtitle:                     # Enhanced subtitle with statistics
+        n_categories = len(sr)                  # len(categories)
+        top_2_pct = (sr.head(2).sum() / total * 100) if n_categories >= 2 else 100
+
+        subtitle = f"{total_label} {total:,} | Categories: {n_categories} | First 2: {top_2_pct:.1f}% | Nulls (nan): {n_nans}"
+        ax.text(0, 1.18, subtitle, ha='center', va='center', fontsize=title_size * 0.7, color='dimgray')
+
+    return ax
+
+
 def plt_pie(
+    data: Union[pd.Series, np.ndarray, dict, list, set, pd.DataFrame],
+    value_counts: Optional[bool] = False,
+    dropna: Optional[bool] = True,
+    order: Optional[str] = 'desc',
+    scale: Optional[int] = 1,
+    figsize: Optional[tuple[float, float]] = None,
+    title: Optional[str] = None,
+    kind: Optional[str] = 'pie',
+    pct_label_place: Optional[str] = 'mix',
+    palette: Optional[list] = None,
+    startangle: Optional[float] = 90,
+    pct_decimals: Optional[int] = 1,
+    labels_rotate: Optional[float] = 0,
+    labels_color: Optional[str] = 'black',
+    legends_loc: Optional[str] = 'best',
+    legends_title: Optional[str] = None,
+    show_stats_subtitle = True   
+) -> tuple[plt.Figure, plt.Axes]:
+    
+    # Build graphs size, and fonts size from scale, and validate scale.
+    if scale < 1 or scale > 16:
+        raise ValueError(f"[ERROR] Invalid 'scale' value. Must between '1' and '16', not '{scale}'.")
+    else:
+        scale = round(scale)
+
+    # Calculate figure dimensions
+    if figsize is None:
+        multiplier = scale + 5
+        w_base, h_base = 1.25, 0.7
+        width, height = w_base * multiplier, h_base * multiplier
+        figsize = (width, height)
+    else:
+        width, height = figsize
+        scale = (width + height) / 2.5
+
+    # Base fig definitions
+    fig, ax = plt.subplots(figsize=figsize, subplot_kw=dict(aspect="equal"))
+
+    ax_plt_pie(ax, data, value_counts, dropna, order, scale, title, kind, pct_label_place, palette, startangle,
+                pct_decimals, labels_rotate, labels_color, legends_loc, legends_title, show_stats_subtitle)    
+                
+    return fig, ax
+
+
+def plt_pie0(
     data: Union[pd.Series, np.ndarray, dict, list, set, pd.DataFrame],
     value_counts: Optional[bool] = False,
     dropna: Optional[bool] = True,

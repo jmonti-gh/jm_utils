@@ -18,7 +18,8 @@ jm_utils/data/jm_matplotlib.py
 jm_utils/data/jm_numpy.py
 jm_utils/data/jm_pandas.py
 jm_utils/data/jm_pdaccessor.py
-jm_utils/data/jm_plt_pru.py
 jm_utils/data/jm_seborn.py
+jm_utils/data/pd_funcs.py
+jm_utils/data/plt_funcs.py
 jm_utils/pwd/__init__.py
 jm_utils/pwd/jm_pmcore.py
