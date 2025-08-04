@@ -29,9 +29,8 @@ from matplotlib.ticker import PercentFormatter  # for pareto chart and ?
 import seaborn as sns
 
 # Local Libs
-from jm_utils.data.jm_pandas import to_series, get_fdt
-
-
+from jm_utils.data.jm_pandas import to_series
+import jm_utils.data.jm_pandas as jm_pd
 
 ## Custom types for non-included typing annotations
 IndexElement: TypeAlias = Union[str, int, float, pd.Timestamp]
@@ -41,7 +40,8 @@ IndexElement: TypeAlias = Union[str, int, float, pd.Timestamp]
 def pru1(data: list):
     sr = to_series(data)
     fig, ax = plt.subplots()
-    ax.pie(x=sr)
+    ax.pie(x=sr, autopct=lambda pct: f"{pct:.2f}", labels=sr.index)
+    plt.show()
 
 
 
@@ -55,8 +55,11 @@ if __name__ == "__main__":
     lst = list(df['Stock'])
     print(lst)
 
+    fdt = jm_pd.get_fdt(df['Stock'])
+    print(fdt)
+
     # Pru1
-    # show_plt_palettes()
+    # pru1(lst)
 
 
 

@@ -1,5 +1,9 @@
+# jm_utils/data/__init__.py
 """
-jm_datascience - Utilities for DS tasks
+Utilities for DS tasks
+
+Subpaquete para utilidades fundamentales del paquete JM_UTILS.
+Contiene módulos para fecha/hora, entorno, imágenes, logging, y rich printing.
 
 Utilities for pandas, numpy, matplotlib, etc.
 """
@@ -19,12 +23,12 @@ __last_modified__ = "2025-06-15"
 # from . import jm_numpy
 # from . import jm_pandas
 
-# Definir qué se exporta con "from jm_utils import *"
-__all__ = [
-    'jm_pdaccessor',
-    'jm_numpy', 
-    'jm_pandas'
-]
+# # Definir qué se exporta con "from jm_utils import *"
+# __all__ = [
+#     'jm_pdaccessor',
+#     'jm_numpy', 
+#     'jm_pandas'
+# ]
 
 # Información del paquete para acceso programático
 def get_version():

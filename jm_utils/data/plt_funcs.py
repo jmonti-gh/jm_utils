@@ -29,9 +29,7 @@ from matplotlib.ticker import PercentFormatter  # for pareto chart and ?
 import seaborn as sns
 
 # Local Libs
-from jm_utils.data.jm_pandas import to_series, get_fdt
-
-
+from jm_utils.data.pd_functs import to_series, get_fdt
 
 ## Custom types for non-included typing annotations
 IndexElement: TypeAlias = Union[str, int, float, pd.Timestamp]
@@ -50,7 +48,7 @@ IndexElement: TypeAlias = Union[str, int, float, pd.Timestamp]
 #   - ...
 
 
-def get_colorblind_color_list():
+def get_colorblind_color_list() -> list[str]:
     """
     Retorna una lista de colores (hexadecimales) amigables para personas
     con daltonismo, equivalentes a sns.color_palette('colorblind').
@@ -65,7 +63,7 @@ def get_colorblind_color_list():
     ]
 
 
-def get_color_list(palette: str, n_items: Optional[int] = 10) -> list[str]:
+def get_color_list(palette: str, n_items: Optional[int] = 10) -> list[str] | list[tuple[float, float, float, float]]:
     """
     | Return a valid matplotlib palette list    | 'colorblind' is a kind of sns.colorblind 
     - Qualitatives (Cat) = ['tab10', 'tab20', 'Set1', 'Set2', 'Set3', 'Pastel1', 'Pastel2', 'Dark2', 'Paired', 'Accent', 'colorblind']
