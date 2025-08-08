@@ -25,11 +25,12 @@ import random
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors             # for get_color_list
 from matplotlib.ticker import PercentFormatter  # for pareto chart and ?
 import seaborn as sns
 
 # Local Libs
-from jm_utils.data.pd_funcs import to_series, get_fdt
+from jm_utils.data.pd_functions import to_series, get_fdt
 
 ## Custom types for non-included typing annotations
 IndexElement: TypeAlias = Union[str, int, float, pd.Timestamp]
@@ -48,104 +49,73 @@ IndexElement: TypeAlias = Union[str, int, float, pd.Timestamp]
 #   - ...
 
 
-def get_colorblind_color_list() -> list[str]:
+def get_color_list(palette: str, n_colors: Optional[int] = 10) -> list[str]:
     """
-    Retorna una lista de colores (hexadecimales) amigables para personas
-    con daltonismo, equivalentes a sns.color_palette('colorblind').
-    """
-    return [
-        '#0173B2', '#DE8F05', '#029E73', '#D55E00', '#CC78BC',
-        '#CA9161', '#FBAFE4', '#949494', '#ECE133', '#56B4E9',
-        '#5D8C3B', '#A93967', '#888888', '#FFC107', '#7C9680',
-        '#E377C2', '#BCBD22', '#AEC7E8', '#FFBB78', '#98DF8A',
-        '#FF9896', '#C5B0D5', '#C49C94', '#F7B6D2', '#DBDB8D',
-        '#9EDAE5', '#D68E3A', '#A65898', '#B2707D', '#8E6C87'
-    ]
+    Returns a list of hex color codes from a specified Matplotlib colormap or a named palette.
 
+    This function generates a list of colors suitable for data visualization. It supports
+    custom Matplotlib colormaps and a predefined 'colorblind' palette optimized for
+    accessibility.
 
-def get_color_list(palette: str, n_items: Optional[int] = 10) -> list[str] | list[tuple[float, float, float, float]]:
-    """
-    | Return a valid matplotlib palette list    | 'colorblind' is a kind of sns.colorblind 
-    - Qualitatives (Cat) = ['tab10', 'tab20', 'Set1', 'Set2', 'Set3', 'Pastel1', 'Pastel2', 'Dark2', 'Paired', 'Accent', 'colorblind']
-    - Sequential (Order) = ['viridis', 'plasma', 'inferno', 'magma', 'cividis', 'Greys', 'Purples', 'Blues', 'Greens', 'Oranges', 'Reds']
-    - Diverging (MidPoint) = ['coolwarm', 'bwr', 'seismic', 'PiYG', 'PRGn', 'BrBG', 'RdGy', 'RdBu', 'Spectral', 'RdYlGn', 'PuOr', 'RdYlBu']
-    - Cyclic (Repeat)= ['twilight', 'twilight_shifted', 'hsv', 'turbo', 'cubehelix', 'gist_rainbow', 'jet', 'nipy_spectral', 'rainbow_r']
-    - Mix = ['rainbow', 'flag', 'prism', 'ocean', 'terrain', 'gnuplot', 'CMRmap', 'hot', 'afmhot', 'gist_heat', 'copper', 'bone', 'pink']
+    Parameters:
+        palette (str): Name of the colormap or palette to use. Special value:
+            - 'colorblind': Returns a predefined colorblind-safe palette.
+            - Any other string: Interpreted as a Matplotlib colormap (e.g., 'viridis', 'plasma').
+
+        n_colors (int, optional): Number of colors to generate from the colormap.
+            Ignored if palette is 'colorblind' (which returns a fixed set).
+            Default is 10.
+
+    Returns:
+        list[str]: A list of hexadecimal color codes (e.g., '#0173B2').
+
+    Raises:
+        ValueError: If the specified Matplotlib colormap does not exist.
+        TypeError: If `n_colors` is not a number.
+
+    Notes:
+        - For the 'colorblind' palette, the function returns a fixed set of 30 colors.
+          If more than 30 are requested, they will be truncated.
+        - Uses `matplotlib.pyplot.get_cmap` and `matplotlib.colors.rgb2hex` internally.
+        - Ideal for use in custom plotting functions requiring consistent, accessible color schemes.
+
+    Example:
+        >>> get_color_list('viridis', 3)
+        ['#440154', '#21908C', '#FDE725']
+
+        >>> get_color_list('colorblind', 5)
+        ['#0173B2', '#DE8F05', '#029E73', '#D55E00', '#CC78BC']
     """
     if palette == 'colorblind':
-        color_list = get_colorblind_color_list()
+        return [
+            '#0173B2', '#DE8F05', '#029E73', '#D55E00', '#CC78BC',
+            '#CA9161', '#FBAFE4', '#949494', '#ECE133', '#56B4E9',
+            '#5D8C3B', '#A93967', '#888888', '#FFC107', '#7C9680',
+            '#E377C2', '#BCBD22', '#AEC7E8', '#FFBB78', '#98DF8A',
+            '#FF9896', '#C5B0D5', '#C49C94', '#F7B6D2', '#DBDB8D',
+            '#9EDAE5', '#D68E3A', '#A65898', '#B2707D', '#8E6C87'
+        ]
     else:
-        cmap = plt.get_cmap(palette, n_items)             # Use palette colormap
-        color_list = [cmap(i) for i in range(n_items)]    # Get colors from the colormap
-
-    return color_list
+        cmap = plt.get_cmap(palette)                        # Get the colormap
+        colors_normalized = np.linspace(0, 1, n_colors)     # Generate equidistant points between 0 and 1
+        colors_rgba = cmap(colors_normalized)               # Get the colors from colormap
+        return [mcolors.rgb2hex(color[:3]) for color in colors_rgba]
 
 
 def show_plt_palettes(
         palette_group: Union[str, list[str]] = 'Sample',
-        n_items: Optional[int]=14,
+        n_colors: Optional[int] = 14,
 ) -> plt.Figure:
-    """
-    Displays a visual comparison of Matplotlib color palettes in a two-column layout.
-
-    This function creates a grid of bar charts, each showing the color progression of a
-    specific Matplotlib colormap. It supports built-in palette groups (Qualitative, Sequential,
-    Diverging, Cyclic), a default 'Sample' view, and custom lists of palettes.
-
-    Parameters:
-        palette_group (Union[str, list[str]]): Specifies which palettes to display:
-            - If str: one of 'Qualitative', 'Sequential', 'Diverging', 'Cyclic', or 'Sample'.
-              Case-insensitive; will be capitalized.
-            - If list: a custom list of colormap names to display.
-            - Default is 'Sample', which shows a representative selection from all groups.
-        n_items (int, optional): Number of color swatches (bars) to display per palette.
-            Must be between 1 and 25 (inclusive). Default is 16.
-
-    Returns:
-        matplotlib.figure.Figure: The generated figure object containing all subplots.
-            This allows further customization, saving, or inspection after display.
-
-    Raises:
-        TypeError: If `palette_group` is not a string or list of strings, or if `n_items`
-            is not a number.
-        ValueError: If `n_items` is not in the valid range (1–25).
-
-    Notes:
-        - Invalid or deprecated colormap names are handled gracefully and labeled accordingly.
-        - The layout adapts to the number of palettes, using two columns for better readability.
-        - Uses `get_colors_list` internally to extract colors from each colormap.
-        - Ideal for exploring and selecting appropriate color schemes for data visualization.
-
-    Example:
-        >>> show_plt_palettes('Sequential', n_items=10)
-        # Displays 10-color samples for all Sequential palettes.
-
-        >>> show_plt_palettes(['viridis', 'plasma', 'coolwarm', 'rainbow'], n_items=12)
-        # Shows a custom comparison of four specific palettes.
-
-        >>> show_plt_palettes()
-        # Shows a default sample of 4 palettes from each category.
-    """
     
-    # Verified n_times parameter
-    if not isinstance(n_items, (int, float)):
-        raise TypeError(f"'n_items' parameter not valid. Must be an int or float. Got '{type(n_items)}'.")
+    # First verified n_colors parameter (cause validation and prerprecess palette_group parameter need more data)
+    if not isinstance(n_colors, (int, float)):
+        raise TypeError(f"'n_items' parameter not valid. Must be an int or float. Got '{type(n_colors)}'.")
 
-    if n_items < 1 or n_items > 25:
-        raise ValueError(f"'n_items' parameter not valid. Must be > 1 and < 26. Got '{n_items}'.")
-    n_items = int(n_items) + 1
-
-    # Palette_group selection + custom palette_group and palette_group parameter validation
-    Custom = []                             # Default empty list for custom palettes
-    if isinstance(palette_group, str):
-        palette_group_key = palette_group.strip().capitalize()
-    elif isinstance(palette_group, list):
-        palette_group_key = 'Custom'
-        Custom = palette_group
-    else:
-        raise TypeError(f"'palette_group' parameter not valid. Must be a string or a list. Got {type(palette_group)}.")
+    if n_colors < 1 or n_colors > 25:
+        raise ValueError(f"'n_items' parameter not valid. Must be > 1 and < 26. Got '{n_colors}'.")
+    n_colors = int(n_colors) + 1
     
-    # 1. Native palette Group lists
+    # Known matplotlib palette group lists - 'colorblind' in Qualitatives is jm addition
     Qualitative = ['Accent', 'colorblind', 'Dark2', 'Dark2_r', 'flag', 'Paired', 'Pastel1', 'Pastel2',
                     'prism', 'Set1', 'Set2', 'Set3', 'tab10', 'tab20', 'tab20b', 'tab20c']
 
@@ -153,44 +123,68 @@ def show_plt_palettes(
               'Greens', 'Greys', 'Greys_r', 'gnuplot', 'inferno', 'magma', 'ocean', 'Oranges',
                 'OrRd', 'plasma', 'PuRd', 'Purples', 'Reds', 'terrain', 'viridis', 'Wistia']
 
-    Diverging = ['BrBG', 'bwr', 'bwr_r', 'coolwarm', 'PiYG', 'PiYG_r', 'PRGn', 'PRGn_r',
-                 'PuOr', 'RdBu', 'RdGy', 'RdYlBu', 'RdYlGn', 'seismic', 'Spectral', 'Spectral_r']
+    Diverging = ['BrBG', 'BrBG_r', 'bwr', 'bwr_r', 'coolwarm', 'PiYG', 'PiYG_r', 'PRGn',
+                 'PRGn_r', 'PuOr', 'PuOr_r', 'RdBu', 'RdBu_r', 'RdGy', 'RdGy_r', 'RdYlBu',
+                 'RdYlBu_r', 'RdYlGn', 'RdYlGn_r', 'seismic', 'Spectral', 'Spectral_r']
 
-    Cyclic = ['berlin', 'berlin_r', 'cubehelix', 'cubehelix_r', 'flag_r', 'gist_rainbow', 'hsv', 'jet_r',
-              'managua', 'nipy_spectral', 'rainbow', 'rainbow_r', 'twilight', 'twilight_shifted', 'turbo', 'vanimo']
+    Cyclic = ['berlin', 'berlin_r', 'cubehelix', 'cubehelix_r', 'flag_r', 'gist_rainbow', 'gist_rainbow_r', 'hsv',
+              'hsv_r', 'jet', 'jet_r', 'managua', 'managua_r', 'nipy_spectral', 'nipy_spectral_r', 'rainbow',
+              'rainbow_r', 'twilight', 'twilight_r','twilight_shifted', 'turbo', 'turbo_r', 'vanimo', 'vanimo_r']
+    
+    Custom = []     # User Custom palette list born empty. It will take the value entered by the user if the user enters a list as palette_group parameter
 
-    # 2. Get the palette group (and _desc) based on the input string (the one selected by the user)
+    Sample = [palette for p_g in [Qualitative, Sequential, Diverging, Cyclic] for palette in random.sample(p_g, k=6)]   # Sample list w/random four of each known group
+    
+    # Palette group dict: p_g_key: (p_g_list, p_g_desc). To show the palette goup (and desc) based on 'palette_group' parameter
     palette_group_dic = {
         'Qualitative': (Qualitative, 'for categorical data'),
         'Sequential': (Sequential, 'for data that has an order'),
         'Diverging': (Diverging, 'for data that have a significant midpoint'),
         'Cyclic': (Cyclic, 'for data that repeats, such as angles or phases'),
         'Custom': (Custom, 'user selected palettes'),
+        'Sample': (Sample, 'a sample of four of each category')
     }
 
-    defaults_for_sample = ('Sample', 'a sample of four of each category')
-    # Get the list of palettes for the selected group and its description
-    selected_palettes, palette_group_desc = palette_group_dic.get(palette_group_key, defaults_for_sample)
+    # Internal auxiliar function to print list names
+    pass
+    
+    # Validate an preprocess palette_group parameter: get the palette_group_key, print lists/names if selected, or fill custom list
+    if isinstance(palette_group, str):          
+        palette_group_key = palette_group.strip().capitalize()
+        if palette_group_key == 'Names':
+            print('TO_DO')                               # función interna que muestra las listas los nombres de las paletas todas
+            return
+        elif palette_group_key not in palette_group_dic.keys():
+            raise ValueError(f"Invalid value for 'palette_group': {repr(palette_group)}. Expected one of: 'cyclic', 'civerging', 'names', 'qualitative', 'sample', 'sequential'.")   
+    elif isinstance(palette_group, list):
+        palette_group_key = 'Custom'
+        Custom = palette_group                  # La lista de palettas ingresadas se etiqueta tamibién como 'Custom'
+    else:
+        raise TypeError(f"'palette_group' parameter not valid. Must be a string or a list. Got {type(palette_group)}.")
 
-    # Adjust the palette_group for the 'Sample' (four from each group)) case. Any value different from the main groups
-    if palette_group_key not in ('Qualitative', 'Sequential', 'Diverging', 'Cyclic', 'Custom'):
-        palette_group_key = 'Sample'                      
-        palette_group = [palette for p_g in [Qualitative, Sequential, Diverging, Cyclic] for palette in random.sample(p_g, k=4)]
-    else:                                                   # If not 'Sample' (all others, custom included), use the selected palettes  
-        palette_group = selected_palettes                   # Assign the actual list if not 'Sample'
+    # Verified n_colors parameter
+    if not isinstance(n_colors, (int, float)):
+        raise TypeError(f"'n_items' parameter not valid. Must be an int or float. Got '{type(n_colors)}'.")
+
+    if n_colors < 1 or n_colors > 25:
+        raise ValueError(f"'n_items' parameter not valid. Must be > 1 and < 26. Got '{n_colors}'.")
+    n_colors = int(n_colors) + 1
+
+    # Get the selected_group and selected_group_desc (description), the ones tha will be displayed                           
+    selected_group, selected_group_desc = palette_group_dic[palette_group_key]
 
     # Build a Series of n_items elements to show colors
-    sr = to_series({str(i): 1 for i in range(1, n_items)})
+    sr = to_series({str(i): 1 for i in range(1, n_colors)})
 
     # Create a figure with two columns for the palettes - Bar charts showing palette colors
-    rows = len(palette_group) // 2 if len(palette_group) % 2 == 0 else (len(palette_group) // 2) + 1
-    width = 12
-    height = rows / 1.25 if rows > 6 else rows / 1.05 
+    rows = len(selected_group) // 2 if len(selected_group) % 2 == 0 else (len(selected_group) // 2) + 1
+    width = 12                                              # Ancho fijo en 12 por ahora (se puede analizar hacerlo proporcional a n_colors?)
+    height = rows / 1.25 if rows > 6 else rows / 1.05       # Para evitar superposición de axes cuando son pocas filas
     
     fig, axs = plt.subplots(rows, 2, figsize=(width, height), tight_layout=True, sharex=True)
 
     # Set the figure title with the palette group key and description
-    fig.suptitle(f"Matplolib {palette_group_key} palettes (cmap): {palette_group_desc}", fontsize=14, fontweight='medium', y=1.001)
+    fig.suptitle(f"Matplolib {palette_group_key} palettes (cmap): {selected_group_desc}", fontsize=14, fontweight='medium', y=1.001)
 
     if palette_group_key == 'Sample':
         fig.text(0.15, 0.95, "4 Qualitative (for categorical data), 4 Sequential (for ordered data),"
@@ -198,11 +192,11 @@ def show_plt_palettes(
                     fontsize=10, transform=fig.transFigure)
 
     # Iterate over the axes and palette group to plot each palette                                           
-    for ax, pltt in zip(axs.flatten(), palette_group):
+    for ax, pltt in zip(axs.flatten(), selected_group):
         try:
-            color_list = get_color_list(pltt, n_items=n_items)
+            color_list = get_color_list(pltt, n_colors)
             ax.bar(sr.index, sr, color=color_list, width=1, edgecolor='white', linewidth=0.2)
-            ax.set_xlim(-0.5, n_items - 1.5)
+            ax.set_xlim(-0.5, n_colors - 1.5)
             ax.set_ylim(0, 0.1)
             ax.set_title(pltt, loc='left', fontsize=10, fontweight='medium')
         except ValueError:
