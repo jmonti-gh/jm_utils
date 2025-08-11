@@ -11,7 +11,7 @@ palette_group = 'Sequential' if palette_group == '' else palette_group
 try:
     n_items = int(n_items)
 except ValueError:
-    n_items = 14
+    n_items = 16
 
 fig = plt_func.show_plt_palettes(palette_group, n_items)
 # input("Presione Enter para continuar...")

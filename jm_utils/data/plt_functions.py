@@ -18,8 +18,9 @@ __last_modified__ = "2025-06-30"
 
 
 ## Standard Libs
-from typing import Union, Optional, Any, Literal, Sequence, TypeAlias
 import random
+import textwrap
+from typing import Union, Optional, Any, Literal, Sequence, TypeAlias
 
 # Third-Party Libs
 import numpy as np
@@ -104,7 +105,7 @@ def get_color_list(palette: str, n_colors: Optional[int] = 10) -> list[str]:
 
 def show_plt_palettes(
         palette_group: Union[str, list[str]] = 'Sample',
-        n_colors: Optional[int] = 14,
+        n_colors: Optional[int] = 16,
 ) -> plt.Figure:
     
     # First verified n_colors parameter (cause validation and prerprecess palette_group parameter need more data)
@@ -113,16 +114,28 @@ def show_plt_palettes(
 
     if n_colors < 1 or n_colors > 25:
         raise ValueError(f"'n_items' parameter not valid. Must be > 1 and < 26. Got '{n_colors}'.")
-    n_colors = int(n_colors) + 1
+    n_colors = int(n_colors)
     
     # Known matplotlib palette group lists - 'colorblind' in Qualitatives is jm addition
     Qualitative = ['Accent', 'colorblind', 'Dark2', 'Dark2_r', 'flag', 'Paired', 'Pastel1', 'Pastel2',
                     'prism', 'Set1', 'Set2', 'Set3', 'tab10', 'tab20', 'tab20b', 'tab20c']
 
     Sequential = ['autumn', 'binary', 'Blues', 'brg', 'BuPu', 'cividis', 'cool', 'GnBu',
-              'Greens', 'Greys', 'Greys_r', 'gnuplot', 'inferno', 'magma', 'ocean', 'Oranges',
-                'OrRd', 'plasma', 'PuRd', 'Purples', 'Reds', 'terrain', 'viridis', 'Wistia']
-
+                  'Greens', 'Greys', 'gnuplot', 'inferno', 'magma', 'ocean', 'Oranges', 'OrRd',
+                  'plasma', 'PuRd', 'Purples', 'Reds', 'terrain', 'viridis', 'Wistia', 'YlGnBu' ]
+    
+    Seq_full = ['afmhot', 'afmhot_r', 'autumn', 'autumn_r', 'binary', 'binary_r', 'Blues', 'Blues_r', 
+              'bone', 'bone_r', 'brg', 'brg_r', 'BuGn', 'BuGn_r', 'BuPu', 'BuPu_r',
+              'cividis', 'cividis_r', 'cool', 'cool_r', 'copper', 'copper_r', 'gist_gray', 'gist_gray_r',
+              'gist_heat', 'gist_heat_r', 'gist_yarg', 'gist_yarg_r', 'GnBu', 'GnBu_r', 'gnuplot', 'gnuplot_r',
+              'gray', 'gray_r', 'Greens', 'Greens_r', 'Greys', 'Greys_r', 'hot', 'hot_r',
+              'inferno', 'inferno_r', 'magma', 'magma_r', 'ocean', 'ocean_r', 'Oranges', 'Oranges_r',
+              'OrRd', 'OrRd_r', 'pink', 'pink_r', 'plasma', 'plasma_r', 'PuBu', 'PuBu_r',
+              'PuBuGn', 'PuBuGn_r', 'PuRd', 'PuRd_r', 'Purples', 'Purples_r', 'RdPu', 'RdPu_r',
+              'Reds', 'Reds_r', 'spring', 'spring_r', 'summer', 'summer_r', 'terrain', 'terrain_r',
+              'viridis', 'viridis_r', 'winter', 'winter_r', 'Wistia', 'Wistia_r', 'YlGn', 'YlGn_r',
+              'YlGnBu', 'YlGnBu_r', 'YlOrBr', 'YlOrBr_r', 'YlOrRd', 'YlOrRd_r']
+    
     Diverging = ['BrBG', 'BrBG_r', 'bwr', 'bwr_r', 'coolwarm', 'PiYG', 'PiYG_r', 'PRGn',
                  'PRGn_r', 'PuOr', 'PuOr_r', 'RdBu', 'RdBu_r', 'RdGy', 'RdGy_r', 'RdYlBu',
                  'RdYlBu_r', 'RdYlGn', 'RdYlGn_r', 'seismic', 'Spectral', 'Spectral_r']
@@ -133,32 +146,45 @@ def show_plt_palettes(
     
     Custom = []     # User Custom palette list born empty. It will take the value entered by the user if the user enters a list as palette_group parameter
 
-    Sample = [palette for p_g in [Qualitative, Sequential, Diverging, Cyclic] for palette in random.sample(p_g, k=6)]   # Sample list w/random four of each known group
+    Sample = [pltt for p_g in [Qualitative, Sequential, Diverging, Cyclic] for pltt in random.sample(p_g, k=6)]   # Sample list w/random six of each known group
     
     # Palette group dict: p_g_key: (p_g_list, p_g_desc). To show the palette goup (and desc) based on 'palette_group' parameter
     palette_group_dic = {
         'Qualitative': (Qualitative, 'for categorical data'),
         'Sequential': (Sequential, 'for data that has an order'),
+        'Seq_full': (Seq_full, 'for data that has an order -full-'),
         'Diverging': (Diverging, 'for data that have a significant midpoint'),
         'Cyclic': (Cyclic, 'for data that repeats, such as angles or phases'),
         'Custom': (Custom, 'user selected palettes'),
-        'Sample': (Sample, 'a sample of four of each category')
+        'Sample': (Sample, 'a sample of six of each category')
     }
 
-    # Internal auxiliar function to print list names
-    pass
+    # Internal auxiliary function that generates a figure containing the names of the palettes according to their type.
+    def _show_dic(dic):
+        all_text =""
+        for group_name, (palette_list, description) in dic.items():
+            all_text += f"# {group_name} - {description}:\n"
+            wrapped = textwrap.fill(", ".join(palette_list), width=140, initial_indent="    ", subsequent_indent="    ")
+            all_text += wrapped + "\n\n"
+        # Build de Figure showing all text
+        fig, ax = plt.subplots(figsize=(12, len(all_text.splitlines()) * 0.2), tight_layout=True)
+        ax.axis("off")                          # Hide x and y axis
+        ax.text(0.025, 0.5, all_text, fontsize=10, va="center", ha="left", family="monospace")
+        plt.show()
+        return fig            
     
-    # Validate an preprocess palette_group parameter: get the palette_group_key, print lists/names if selected, or fill custom list
+    # Validate and preprocess palette_group parameter: get the palette_group_key, print lists/names if selected, or fill custom list
     if isinstance(palette_group, str):          
         palette_group_key = palette_group.strip().capitalize()
         if palette_group_key == 'Names':
-            print('TO_DO')                               # función interna que muestra las listas los nombres de las paletas todas
-            return
+            fig = _show_dic(palette_group_dic)
+            return fig
         elif palette_group_key not in palette_group_dic.keys():
-            raise ValueError(f"Invalid value for 'palette_group': {repr(palette_group)}. Expected one of: 'cyclic', 'civerging', 'names', 'qualitative', 'sample', 'sequential'.")   
+            raise ValueError(f"Invalid value for 'palette_group': {repr(palette_group)}."
+                             " Expected one of: 'cyclic', 'diverging', 'names', 'qualitative', 'sample', 'sequential', 'seq_full.")   
     elif isinstance(palette_group, list):
         palette_group_key = 'Custom'
-        Custom = palette_group                  # La lista de palettas ingresadas se etiqueta tamibién como 'Custom'
+        Custom = palette_group                  # The list of entered palettes is also assigned to the Custom variable
     else:
         raise TypeError(f"'palette_group' parameter not valid. Must be a string or a list. Got {type(palette_group)}.")
 
@@ -178,8 +204,8 @@ def show_plt_palettes(
 
     # Create a figure with two columns for the palettes - Bar charts showing palette colors
     rows = len(selected_group) // 2 if len(selected_group) % 2 == 0 else (len(selected_group) // 2) + 1
-    width = 12                                              # Ancho fijo en 12 por ahora (se puede analizar hacerlo proporcional a n_colors?)
-    height = rows / 1.25 if rows > 6 else rows / 1.05       # Para evitar superposición de axes cuando son pocas filas
+    width = 12                                              # Fixed width at 12 for now (can we look into making it proportional to n_colors?)
+    height = rows / 1.25 if rows > 6 else rows / 1.05       # To avoid overlapping axes when there are few rows
     
     fig, axs = plt.subplots(rows, 2, figsize=(width, height), tight_layout=True, sharex=True)
 
@@ -187,8 +213,8 @@ def show_plt_palettes(
     fig.suptitle(f"Matplolib {palette_group_key} palettes (cmap): {selected_group_desc}", fontsize=14, fontweight='medium', y=1.001)
 
     if palette_group_key == 'Sample':
-        fig.text(0.15, 0.95, "4 Qualitative (for categorical data), 4 Sequential (for ordered data),"
-                             "4 Diverging (significant midpoint), and 4 Cyclic (for repeated data)",
+        fig.text(0.15, 0.95, "6 Qualitative (for categorical data), 6 Sequential (for ordered data),"
+                             "6 Diverging (significant midpoint), and 6 Cyclic (for repeated data)",
                     fontsize=10, transform=fig.transFigure)
 
     # Iterate over the axes and palette group to plot each palette                                           
