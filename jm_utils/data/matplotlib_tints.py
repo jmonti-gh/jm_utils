@@ -1,6 +1,9 @@
-# jm_utils/data/jm_matplotlib
+# jm_utils/data/matplotlib_tints
 """
-¡?
+Diccionarios y funciones relacionadas con colores y paletas matplotlib
+
+Utilizamos 'tints' en vez de color en el nombre para que no se confunda con el módulo 'colors' original de matplot lib
+-> import jm_utils.data.matplotlib_tints as mpl_tints
 """
 
 ## TO-DO
@@ -8,7 +11,7 @@
 
 
 __version__ = "0.1.0"
-__description__ = "Custom pandas functions for data cleaning and manipulation."
+__description__ = "Diccionarios y funciones relacionadas con colores y paletas matplotlib."
 __author__ = "Jorge Monti"
 __email__ = "jorgitomonti@gmail.com"
 __license__ = "MIT"

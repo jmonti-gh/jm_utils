@@ -1,20 +1,25 @@
-# jm_utils/data/jm_matplotlib
+# jm_utils/data/mpl_tints
 """
-¡?
+Diccionarios y funciones relacionadas con colores y paletas matplotlib
+
+Utilizamos 'tints' en vez de color en el nombre para que no se confunda con el módulo 'colors' original de matplot lib
+-> import jm_utils.data.matplotlib_tints as mpl_tints
 """
 
 ## TO-DO
-## pie - paretto - en lo posible mismos parámetros
+# Dicts
+# plot_colors
+# plot_palettes
 
 
 __version__ = "0.1.0"
-__description__ = "Custom pandas functions for data cleaning and manipulation."
+__description__ = "Diccionarios y funciones relacionadas con colores y paletas matplotlib."
 __author__ = "Jorge Monti"
 __email__ = "jorgitomonti@gmail.com"
 __license__ = "MIT"
 __status__ = "Development"
 __python_requires__ = ">=3.11"
-__last_modified__ = "2025-06-30"
+__last_modified__ = "2025-08-20"
 
 
 ## Standard Libs
@@ -27,9 +32,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors             # for get_color_list()
-from matplotlib.ticker import PercentFormatter  # for pareto chart() and... ?
 from matplotlib import colormaps                # for show_matplotlib_palettes()
-# import seaborn as sns
 
 # Local Libs
 from jm_utils.data.pd_functions import to_series, get_fdt
@@ -38,8 +41,10 @@ from jm_utils.data.pd_functions import to_series, get_fdt
 IndexElement: TypeAlias = Union[str, int, float, pd.Timestamp]
 # IndexElement: TypeAlias = Union[str, int, float, 'datetime.datetime', np.str_, np.int64, np.float64, np.datetime64, pd.Timestamp, ...]
 
-MPL_CMAP_NAMES = {
-             "Cyclic": ([
+
+## Dictionaries
+CMAP_NAMES_BY_CAT = {
+        "Cyclic": ([
             "hsv", "hsv_r", "twilight", "twilight_r", "twilight_shifted", "twilight_shifted_r"
         ], 'For values that wrap around at the endpoints, such as phase angle, wind direction, or time of day'),
         
@@ -78,13 +83,12 @@ MPL_CMAP_NAMES = {
         
         "Other Sequential": ([
             "afmhot", "afmhot_r", "berlin", "berlin_r", "CMRmap", "CMRmap_r", "copper", "copper_r",
-            "crest", "crest_r", "cubehelix", "cubehelix_r", "flare", "flare_r", "gist_earth", "gist_earth_r",
-            "gist_grey", "gist_grey_r", "gist_heat", "gist_heat_r", "gist_yarg", "gist_yarg_r", "gist_yerg",
-            "gist_yerg_r", "hot", "hot_r", "icefire", "icefire_r", "mako", "mako_r", "managua", "managua_r",
-            "ocean", "ocean_r", "pink", "pink_r", "rocket", "rocket_r", "terrain", "terrain_r",
-            "vanimo", "vanimo_r", "vlag", "vlag_r", "Wistia", "Wistia_r"
+            "cubehelix", "cubehelix_r", "gist_earth", "gist_earth_r", "gist_grey", "gist_grey_r", "gist_heat", "gist_heat_r",
+            "gist_yarg", "gist_yarg_r", "gist_yerg", "gist_yerg_r", "hot", "hot_r", "managua", "managua_r",
+            "ocean", "ocean_r", "pink", "pink_r", "terrain", "terrain_r", "vanimo", "vanimo_r",
+            "Wistia", "Wistia_r"
         ], 'For representing information that has ordering'),
-        
+
         "Qualitative": ([
             "Accent", "Accent_r", 'colorblind', "Dark2", "Dark2_r", "Paired", "Paired_r", "Pastel1",
             "Pastel1_r", "Pastel2", "Pastel2_r", "Set1", "Set1_r", "Set2", "Set2_r", "Set3",
@@ -93,18 +97,21 @@ MPL_CMAP_NAMES = {
         ], 'To represent information which does not have ordering or relationships. Also for categorical data')
 }
 
-#--------------------------------------------------------------------------------------------------------------------------------#
-#  CHARTs Functions:
-#--------------------------------------------------------------------------------------------------------------------------------#
-#   - Aux: get_colorblind_palette_list(), get_colors_list(),  _validate_numeric_series()
-# Common parameters for categorical charts:
-#   - data: Union[pd.Series, pd.DataFrame], | One or two col DF. Case two cols 1se col is index (categories) and 2nd values
-#   - value_counts: Optional[bool] = False, | You can plot native values or aggregated ones by categories
-#   - scale: Optional[int] = 1,             | All sizes, widths, etc. are scaled from this number (from 1 to 9)
-#   - ...
+COLORS_NAMES_BY_CAT = {
+    "BASE_COLORS": (list(mcolors.BASE_COLORS),
+                    """One letter color names: 'b'lue, 'g'reen, 'r'ed, 'c'yan, 'm'agenta, 'y'ellow, blac'k', 'w'hite
+                    The colors g, c, m, and y do not coincide with X11/CSS4 colors. Their particular shades were chosen for better visibility of 
+                    colored lines against typical backgrounds"""),
+    'CSS4_COLORS': (list(mcolors.CSS4_COLORS),
+                    "Case-insensitive X11/CSS4 color name with no spaces"),
+    'TABLEAU_COLORS': (list(mcolors.TABLEAU_COLORS),
+                    "Tableau Palette"),
+    'XKCD_COLORS': (list(mcolors.XKCD_COLORS),
+                    "The 954 most common RGB monitor colors, as defined by several hundred thousand participants in the xkcd color name survey")                  
+}
 
-
-def get_color_list(palette: str, n_colors: Optional[int] = 10) -> list[str]:
+## Functions
+def get_color_hex_list(palette: str, n_colors: Optional[int] = 10) -> list[str]:
     """
     Returns a list of hex color codes from a specified Matplotlib colormap or a named palette.
 
@@ -155,72 +162,12 @@ def get_color_list(palette: str, n_colors: Optional[int] = 10) -> list[str]:
         colors_normalized = np.linspace(0, 1, n_colors)     # Generate equidistant points between 0 and 1
         colors_rgba = cmap(colors_normalized)               # Get the colors from colormap
         return [mcolors.rgb2hex(color[:3]) for color in colors_rgba]
-    
-
-def get_matplotlib_palettes_dict():
-    """ matplotlib v. 3.10.3 """
-    matplotlib_palettes = {
-        "Cyclic": ([
-            "hsv", "hsv_r", "twilight", "twilight_r", "twilight_shifted", "twilight_shifted_r"
-        ], 'For values that wrap around at the endpoints, such as phase angle, wind direction, or time of day'),
-        
-        "Diverging": ([
-            "BrBG", "BrBG_r", "bwr", "bwr_r", "coolwarm", "coolwarm_r", "PiYG", "PiYG_r",
-            "PRGn", "PRGn_r", "PuOr", "PuOr_r", "RdBu", "RdBu_r", "RdGy", "RdGy_r",
-            "RdYlBu", "RdYlBu_r", "RdYlGn", "RdYlGn_r", "seismic", "seismic_r", "Spectral", "Spectral_r"
-        ], 'When the information being plotted has a critical middle value, such as topography or when the data deviates around zero'),
-        
-        "Miscellaneous": ([
-            "brg", "brg_r", 'CMRmap', 'CMRmap_r', 'cubehelix', 'cubehelix_r', "flag", "flag_r",
-            'gist_earth', 'gist_earth_r', "gist_ncar", "gist_ncar_r", "gist_rainbow", "gist_rainbow_r", "gist_stern", "gist_stern_r",
-            "gnuplot", "gnuplot_r", "gnuplot2", "gnuplot2_r", "jet", "jet_r", "nipy_spectral", "nipy_spectral_r",
-            'ocean', 'ocean_r', "prism", "prism_r", 'terrain', 'terrain_r', 'turbo', 'turbo_r',
-            "rainbow", "rainbow_r"
-        ], 'Particular uses for which they have been created. E.G gist_earth, ocean, and terrain for plotting topography'),
-        
-        "Perceptually Uniform Sequential": ([
-            "cividis", "cividis_r", "inferno", "inferno_r", "magma", "magma_r", "plasma", "plasma_r",
-            "viridis", "viridis_r"
-        ], 'For representing information that has ordering'),
-        
-        "Single-Hue Sequential": ([
-            "binary", "binary_r", "Blues", "Blues_r", "bone", "bone_r", "gist_gray", "gist_gray_r",
-            "gist_yarg", "gist_yarg_r", "gray", "gray_r", "Grays", "Grays_r", "Greens", "Greens_r",
-            "grey", "grey_r", "Greys", "Greys_r", "Oranges", "Oranges_r", "Purples", "Purples_r",
-            "Reds", "Reds_r"
-        ], 'For representing information that has ordering'),
-        
-        "Multi-Hue Sequential": ([
-            "autumn", "autumn_r", "BuGn", "BuGn_r", "BuPu", "BuPu_r", "cool", "cool_r",
-            "GnBu", "GnBu_r", "OrRd", "OrRd_r", "PuBu", "PuBu_r", "PuBuGn", "PuBuGn_r",
-            "PuRd", "PuRd_r", "spring", "spring_r", "summer", "summer_r", "winter", "winter_r",
-            "YlGn", "YlGn_r", "YlGnBu", "YlGnBu_r", "YlOrBr", "YlOrBr_r", "YlOrRd", "YlOrRd_r"
-        ], 'For representing information that has ordering'),
-        
-        "Other Sequential": ([
-            "afmhot", "afmhot_r", "berlin", "berlin_r", "CMRmap", "CMRmap_r", "copper", "copper_r",
-            "crest", "crest_r", "cubehelix", "cubehelix_r", "flare", "flare_r", "gist_earth", "gist_earth_r",
-            "gist_grey", "gist_grey_r", "gist_heat", "gist_heat_r", "gist_yarg", "gist_yarg_r", "gist_yerg",
-            "gist_yerg_r", "hot", "hot_r", "icefire", "icefire_r", "mako", "mako_r", "managua", "managua_r",
-            "ocean", "ocean_r", "pink", "pink_r", "rocket", "rocket_r", "terrain", "terrain_r",
-            "vanimo", "vanimo_r", "vlag", "vlag_r", "Wistia", "Wistia_r"
-        ], 'For representing information that has ordering'),
-        
-        "Qualitative": ([
-            "Accent", "Accent_r", 'colorblind', "Dark2", "Dark2_r", "Paired", "Paired_r", "Pastel1",
-            "Pastel1_r", "Pastel2", "Pastel2_r", "Set1", "Set1_r", "Set2", "Set2_r", "Set3",
-            "Set3_r", "tab10", "tab10_r", "tab20", "tab20_r", "tab20b", "tab20b_r", "tab20c",
-            "tab20c_r"
-        ], 'To represent information which does not have ordering or relationships. Also for categorical data')
-    }
-
-    return matplotlib_palettes
 
 
-def show_matplotlib_palettes(
+def plot_mpl_palettes(
         palette_group: Union[str, list[str]] = 'Sample',
         n_colors: Optional[int] = 64,
-        discrete: Optional[bool] = True
+        continous: Optional[bool] = False
 ) -> plt.Figure:
     """
     Displays a visual comparison of Matplotlib colormaps (palettes) in a grid layout.
@@ -243,9 +190,9 @@ def show_matplotlib_palettes(
             Used only when `discrete=True`. Must be between 1 and 99.
             Default is 64.
 
-        discrete (bool, optional): If True, displays palettes as discrete color bars.
-            If False, displays them as continuous color gradients.
-            Default is True.
+        continous (bool, optional): If False, displays palettes as discrete color bars.
+            If True, displays them as continuous color gradients.
+            Default is False.
 
     Returns:
         matplotlib.figure.Figure: The generated figure object containing all palette views.
@@ -289,11 +236,11 @@ def show_matplotlib_palettes(
     n_colors = int(n_colors) + 1
     
     # Get the known matplotlib palettes in a dict by categories plus addtion of 'Sample' key-value (later we must add also 'Custom' key-value if pallete_group is a list)
-    palettes_by_category_dic = get_matplotlib_palettes_dict()                                   # dict_keys(['Cyclic', 'Diverging', 'Miscellaneous', 'Perceptually Uniform Sequential', 'Single-Hue Sequential', 'Multi-Hue Sequential', 'Special Sequential', 'Qualitative'])
+    palettes_by_category_dic = CMAP_NAMES_BY_CAT                                        # dict_keys(['Cyclic', 'Diverging', 'Miscellaneous', 'Perceptually Uniform Sequential', 'Single-Hue Sequential', 'Multi-Hue Sequential', 'Special Sequential', 'Qualitative'])
     
-    list_of_pltt_lists = [value[0] for value in palettes_by_category_dic.values()]              # Nedeed as source of data to get a random sample of 4 palettes of e/category
-    palettes_by_category_dic['Sample'] = (                                                      # Added 'Sample' dict_key
-        [pltt for p_g in list_of_pltt_lists for pltt in random.sample(p_g, k=4)],               # A random sample of four of e/category
+    list_of_pltt_lists = [value[0] for value in palettes_by_category_dic.values()]      # Nedeed as source of data to get a random sample of 4 palettes of e/category
+    palettes_by_category_dic['Sample'] = (                                              # Added 'Sample' dict_key
+        [pltt for p_g in list_of_pltt_lists for pltt in random.sample(p_g, k=4)],       # A random sample of four of e/category
         "4 Cyclic, 4 Diverging, 4 Miscellaneous, 4 Perceptually Uniform Sequential,"
         "4 Single-Hue Sequential, 4 Multi-Hue Sequential, 4 Other Sequential, 4 Qualitative")
 
@@ -322,8 +269,8 @@ def show_matplotlib_palettes(
             return fig
         elif palette_group_key not in palettes_by_category_dic.keys():
             raise ValueError(f"Invalid value for 'palette_group': {repr(palette_group)}. Expected one of:"
-                             "'Cyclic', 'Diverging', 'Miscellaneous', 'Perceptually Uniform Sequential', 'Single-Hue Sequential'," 
-                             "'Multi-Hue Sequential', 'Other Sequential', 'Qualitative', 'Custom', 'Sample'.")
+                             "'Cyclic', 'Diverging', 'Miscellaneous', 'Perceptually Uniform Sequential',"
+                             "'Single-Hue Sequential', 'Multi-Hue Sequential', 'Other Sequential', 'Qualitative','Sample'.")
         else:
             # Get the palette_group_list and palette_group_desc of the selected palette category (group)
             palette_group_list, palette_group_desc = palettes_by_category_dic[palette_group_key]
@@ -334,7 +281,7 @@ def show_matplotlib_palettes(
     else:
         raise TypeError(f"Invalid type for 'palette_group': {repr(palette_group)}. Expected one of: 'str' or 'list'.")
 
-    if discrete:                                                # Displays n_colors from the palette slightly separated by a thin white line
+    if continous is False:                                                # Displays n_colors from the palette slightly separated by a thin white line
         # Build a Series of n_items elements to show colors
         sr = to_series({str(i): 1 for i in range(1, n_colors)})
 
@@ -346,13 +293,13 @@ def show_matplotlib_palettes(
         fig, axs = plt.subplots(rows, 2, figsize=(width, height), sharex=True, gridspec_kw=dict(wspace=0.1), constrained_layout=True)
 
         # Set the figure title and subtitle with the palette group key and description
-        fig.suptitle(f"* Matplolib {palette_group_key} colormaps (palettes) - {len(palette_group_list)} *\n{palette_group_desc}",
+        fig.suptitle(f"* Matplolib {palette_group_key} colormaps (palettes) - {len(palette_group_list)} - (n_colors = {n_colors - 1}) *\n{palette_group_desc}",
                     fontsize=12, fontweight='medium')
 
         # Iterate over the axes and palette group to plot each palette                                           
         for ax, pltt in zip(axs.flatten(), palette_group_list):
             try:
-                color_list = get_color_list(pltt, n_colors)
+                color_list = get_color_hex_list(pltt, n_colors)
                 ax.bar(sr.index, sr, color=color_list, width=1, edgecolor='white', linewidth=0.2)
                 ax.set_xlim(-0.5, n_colors - 1.5)
                 ax.set_ylim(0, 0.1)
@@ -401,7 +348,13 @@ if __name__ == "__main__":
     df = pd.DataFrame.from_dict(dic, orient='index', columns=['Stock', 'Obs'])
 
     # Show palettes
-    show_plt_palettes()
+    # plot_mpl_palettes('names')
+    for key in CMAP_NAMES_BY_CAT.keys():
+        plot_mpl_palettes(key)
+        # plot_mpl_palettes(key, continous=True)
+
+
+
 
 
 
