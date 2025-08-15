@@ -96,7 +96,7 @@ CMAP_NAMES_BY_CAT = {
             "tab20c_r"
         ], 'To represent information which does not have ordering or relationships. Also for categorical data')
 }
-
+#00a98f
 COLORS_NAMES_BY_CAT = {
     "BASE_COLORS": (list(mcolors.BASE_COLORS),
                     """One letter color names: 'b'lue, 'g'reen, 'r'ed, 'c'yan, 'm'agenta, 'y'ellow, blac'k', 'w'hite
@@ -106,8 +106,20 @@ COLORS_NAMES_BY_CAT = {
                     "Case-insensitive X11/CSS4 color name with no spaces"),
     'TABLEAU_COLORS': (list(mcolors.TABLEAU_COLORS),
                     "Tableau Palette"),
+    'BRAND_COLORS': ([
+        '#108A99', '#0a3a6c', '#113D76', '#006699', '#1c396d', '#fd5c63', '#ff6a00', '#d6682d', '#D8630E', '#a4c639',
+        '#00A8E0', '#472F92', '#FF0033', '#3B5998', '#00A1F1', '#F5CB39', '#25D366', '#0085C3', '#ffde57', '#4584b6',
+        '#646464', '#e32119', '#0a66c2', '#08107b', '#dfb226', '#777777', '#092e20', '#589636', '#5c92fa', '#a6a685',
+        '#a6a685', '#ff0000', '#0db7ed', '#384d54', '#ddb321', '#ffcc00', '#000000', '#003369', '#9d0a0e', '#6d1d7c',
+        '#4078c0', '#fca326', '#ff6600', '#9cb443', '#242f3a', '#00758f', '#f29111', '#8892be', '#4f5b93', '#99cc99'
+    ],
+    """365 DataScience, MTM(1), MTM(2), IBM, Ford, Airbnb, Alibaba, MTM(3), MTM(4), Android, AT&T, Cadbury, ESPN, Facebook, Microsoft, IKEA(1),
+        Wathsapp, DELL, Python(1), Python(2), Python(3), Ferrari, LinkedIn(1), Olympus(1), Olympus(2), Olympus(3), Django, MongoDB, Motorola,
+        Fairmont(1), Fairmont(2), Youtube(1), Docker(1), Docker(2), Lamborghini, National Geographic(1), National Geographic(2),
+        Western Digital(6), Western Digital(5), E4, GitHub(1), GitLab(1), JBL, Khan Academy(1), Khan Academy(2), MySQL(1), MySQL(2), PHP(1),
+        PHP(2), PHP(3), """),
     'XKCD_COLORS': (list(mcolors.XKCD_COLORS),
-                    "The 954 most common RGB monitor colors, as defined by several hundred thousand participants in the xkcd color name survey")                  
+            "The 954 most common RGB monitor colors, as defined by several hundred thousand participants in the xkcd color name survey"),
 }
 
 ## Functions
