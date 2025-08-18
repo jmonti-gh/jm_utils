@@ -45,15 +45,26 @@ IndexElement: TypeAlias = Union[str, int, float, pd.Timestamp]
 # IndexElement: TypeAlias = Union[str, int, float, 'datetime.datetime', np.str_, np.int64, np.float64, np.datetime64, pd.Timestamp, ...]
 
 
+## Dictionaries - Own colors dictionary added to matplotlib
+mcolors.BRAND_COLORS = {
+    '365 DataScience': '#108A99', 'AT&T': '#00A8E0', 'Airbnb': '#FD5C63', 'Alibaba': '#FF6A00', 'Android': '#A4C639', 'Cadbury': '#472F92', 'DELL': '#0085C3', 'Django': '#092E20',
+    'Docker(1)': '#0DB7ED', 'Docker(2)': '#384D54', 'E4': '#6D1D7C', 'ESPN': '#FF0033', 'Facebook': '#3B5998', 'Fairmont(1)': '#A6A685', 'Fairmont(2)': '#E32119', 'Ferrari': '#1C396D',
+    'Ford': '#4078C0', 'GitHub(1)': '#FCA326', 'GitLab(1)': '#006699', 'IBM': '#F5CB39', 'IKEA(1)': '#FF6600', 'JBL': '#9CB443', 'Khan Academy(1)': '#242F3A', 'Khan Academy(2)': '#DDB321',
+    'Lamborghini': '#0A66C2', 'LinkedIn(1)': '#0A3A6C', 'MTM(1)': '#113D76', 'MTM(2)': '#D6682D', 'MTM(3)': '#D8630E', 'MTM(4)': '#00A1F1', 'Microsoft': '#589636','MongoDB': '#5C92FA',
+    'Motorola': '#00758F', 'MySQL(1)': '#F29111', 'MySQL(2)': '#FFCC00', 'National Geographic(1)': '#000000', 'National Geographic(2)': '#08107B', 'Olympus(1)': '#DFB226', 'Olympus(2)': '#777777', 'Olympus(3)': '#8892BE',
+    'PHP(1)': '#4F5B93', 'PHP(2)': '#99CC99', 'PHP(3)': '#FFDE57', 'Python(1)': '#4584B6', 'Python(2)': '#646464', 'Python(3)': '#25D366', 'WhatsApp': '#9D0A0E', 'Western Digital(5)': '#003369',
+    'Western Digital(6)': '#FF0000'
+}
+
 ## Dictionaries
 COLORS_NAMES_BY_CAT = {
-    "BASE_COLORS": (list(mcolors.BASE_COLORS),
+    "BASE_COLORS": (list(mcolors.BASE_COLORS.keys()),
                     """One letter color names: 'b'lue, 'g'reen, 'r'ed, 'c'yan, 'm'agenta, 'y'ellow, blac'k', 'w'hite
                     The colors g, c, m, and y do not coincide with X11/CSS4 colors. Their particular shades were chosen for better visibility of 
                     colored lines against typical backgrounds"""),
-    'CSS4_COLORS': (list(mcolors.CSS4_COLORS),
+    'CSS4_COLORS': (list(mcolors.CSS4_COLORS.keys()),
                     "Case-insensitive X11/CSS4 color name with no spaces"),
-    'TABLEAU_COLORS': (list(mcolors.TABLEAU_COLORS),
+    'TABLEAU_COLORS': (list(mcolors.TABLEAU_COLORS.keys()),
                     "Tableau Palette"),
     'BRAND_COLORS': ([
         '#108A99', '#00A8E0', '#FD5C63', '#FF6A00', '#A4C639', '#472F92', '#0085C3', '#092E20', '#0DB7ED', '#384D54',
@@ -67,7 +78,7 @@ COLORS_NAMES_BY_CAT = {
         MTM(1), MTM(2), MTM(3), MTM(4), Microsoft, MongoDB, Motorola, MySQL(1), MySQL(2), National Geographic(1), National Geographic(2),
         Olympus(1), Olympus(2), Olympus(3), PHP(1), PHP(2), PHP(3), Python(1), Python(2), Python(3), Wathsapp, Western Digital(5),
         Western Digital(6), Youtube(1)"""),
-    'XKCD_COLORS': (list(mcolors.XKCD_COLORS),
+    'XKCD_COLORS': (list(mcolors.XKCD_COLORS.keys()),
             "The 954 most common RGB monitor colors, as defined by several hundred thousand participants in the xkcd color name survey"),
 }
 
@@ -77,14 +88,14 @@ JM_QUALITATIVE_CMAPS = {
                    '#56B4E9', '#5D8C3B', '#A93967', '#888888', '#FFC107', '#7C9680', '#E377C2', '#BCBD22', '#AEC7E8',
                    '#FFBB78', '#98DF8A', '#FF9896', '#C5B0D5', '#C49C94', '#F7B6D2', '#DBDB8D', '#9EDAE5', '#D68E3A',
                    '#A65898', '#B2707D', '#8E6C87'],
-    "neon_fusion": ["#04e762", "#f5b700", "#dc0073", "#008bf8", "#89fc00", "#3cfc8b", "#dcab18", "#dc1100", "#0060ac",
-                    "#89fc00", "#2ee704", "#ffcf42"],
-    "qualitative": ["#6494aa", "#a63d40", "#e9b872", "#90a959", "#904ca9", "#e56ba4", "#3d3d3d", "#95b6c5", "#8f5455",
-                    "#d3e972", "#66783e", "#9b33c2"],
-    "serene_blue": ["#e7ecef", "#274c77", "#6096ba", "#a3cef1", "#8b8c89", "#ffffff", "#374d67", "#6060ba", "#61abe7",
-                    "#93a372", "#e7efed", "#3a71b1"],
-    "sunny_beach_day": ["#001524", "#15616d", "#ffecd1", "#ff7d00", "#78290f", "#004270", "#225860", "#f6ffd1", "#b25800",
-                        "#852202", "#00241d", "#219aad"],
+    "neon": ["#04e762", "#f5b700", "#dc0073", "#008bf8", "#89fc00", "#3cfc8b", "#dcab18", "#dc1100", "#0060ac", 
+             "#89fc00", "#2ee704", "#ffcf42"],
+    "neat": ["#6494aa", "#a63d40", "#e9b872", "#90a959", "#904ca9", "#e56ba4", "#3d3d3d", "#95b6c5", "#8f5455",
+             "#d3e972", "#66783e", "#9b33c2"],
+    "serene": ["#e7ecef", "#274c77", "#6096ba", "#a3cef1", "#8b8c89", "#ffffff", "#374d67", "#6060ba", "#61abe7",
+               "#93a372", "#e7efed", "#3a71b1"],
+    "beach_day": ["#001524", "#15616d", "#ffecd1", "#ff7d00", "#78290f", "#004270", "#225860", "#f6ffd1", "#b25800",
+                  "#852202", "#00241d", "#219aad"],
     "vibrant_summer": ["#ff595e", "#ffca3a", "#8ac926", "#1982c4", "#6a4c93", "#ffa6a8", "#ebc14e", "#28c926", "#105580",
                        "#6736a9", "#ff59c2", "#ffdf87"]
 }
@@ -137,16 +148,17 @@ CMAP_NAMES_BY_CAT = {
         ], 'For representing information that has ordering'),
 
         "Qualitative": ([
-            "Accent", "Accent_r", 'colorblind', "Dark2", "Dark2_r", "neon_fusion", "Paired", "Paired_r",
-            "Pastel1", "Pastel1_r", "Pastel2", "Pastel2_r", "qualitative", "serene_blue", "Set1", "Set1_r",
-            "Set2", "Set2_r", "Set3", "Set3_r", "sunny_beach_day", "tab10", "tab10_r", "tab20",
-            "tab20_r", "tab20b", "tab20b_r", "tab20c", "tab20c_r", "vibrant_summer"
+            "Accent", "Accent_r", 'colorblind', 'colorblind_r', "Dark2", "Dark2_r", "neon", "neon_r",
+            "Paired", "Paired_r", "Pastel1", "Pastel1_r", "Pastel2", "Pastel2_r", "neat", "neat_r",
+            "serene", "serene_r", "Set1", "Set1_r", "Set2", "Set2_r", "Set3", "Set3_r",
+            "beach_day", "beach_day_r", "tab10", "tab10_r", "tab20", "tab20_r", "tab20b", "tab20b_r",
+            "tab20c", "tab20c_r", "vibrant_summer", "vibrant_summer_r"
         ], 'To represent information which does not have ordering or relationships. Also for categorical data')
 }
 
 
 ## Functions
-def register_a_cmap(cmap_name, cmap, n_bins=256):
+def register_mpl_palette(cmap_name, cmap, n_bins=256):
     if cmap_name not in colormaps():
         cmap_custom = mcolors.LinearSegmentedColormap.from_list(cmap_name, cmap, N=n_bins)
         plt.colormaps.register(cmap_custom)
@@ -489,11 +501,6 @@ def plot_mpl_palettes(
 
             ax.set_axis_off()
     else:                                               # Displays a continuous strip of colors
-        try:    # Remove 'colorblind' if exist in the selected list (Qualitative or Sample)
-            palette_group_list.remove('colorblind')     # 'colorblind' in Matplotlib is jm construction
-        except ValueError:
-            pass
-
         gradient = np.linspace(0, 1, 256)
         gradient = np.vstack((gradient, gradient))
 
@@ -506,7 +513,8 @@ def plot_mpl_palettes(
         axs[0].set_title(f"{palette_group_key} colormaps\n{palette_group_desc}", fontsize=12)
 
         for ax, name in zip(axs, palette_group_list):
-            ax.imshow(gradient, aspect='auto', cmap=colormaps[name])
+            # ax.imshow(gradient, aspect='auto', cmap=colormaps[name])
+            ax.imshow(gradient, aspect='auto', cmap=name)
             ax.text(-0.01, 0.5, name, va='center', ha='right', fontsize=10,
                     transform=ax.transAxes)
 
@@ -519,14 +527,11 @@ def plot_mpl_palettes(
 
 
 ## Needed rutines that must be runed here
-#   - Register direct JM_QUALITATIVE_CMAPS
-# for cmap_name, cmap in JM_QUALITATIVE_CMAPS.items():
-#     custom_cmap = register_a_cmap(cmap_name, cmap, len(cmap))   # Get custom_cmap and register direct cmap
-#     cmap_rname = cmap_name + '_r'                               # Build the reversed cmap_name (cmap_rname)
-#     cmap_r = cmap.copy()                                        # Build the reverced cmap
-#     cmap_r = cmap.reverse()
-#     register_a_cmap(cmap_rname, cmap_r, len(cmap_r))            # Register reversed cmap
-
+#   - Register direct and reversed JM_QUALITATIVE_CMAPS
+for cmap_name, cmap in JM_QUALITATIVE_CMAPS.items():
+    custom_cmap = register_mpl_palette(cmap_name, cmap, len(cmap))      # Get custom_cmap and register direct cmap
+    custom_cmap_r = custom_cmap.reversed()                              # Build the reversed cmap (default name: ... + '_r')
+    plt.colormaps.register(custom_cmap_r)                               # Register reversed cmap
 
 
     
