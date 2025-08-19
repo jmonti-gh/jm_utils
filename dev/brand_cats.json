@@ -1,0 +1,43 @@
+{
+    "Automotive": [
+        "audi", "ford", "ferrari", "fiat", "lamborghini", "continental-ag",
+        "daimler", "bmw", "toyota", "nissan"
+    ],
+    "Fashion": [
+        "adidas", "gucci", "fendi", "lego", "beats-by-dre", "nike", "puma"
+    ],
+    "Finance": [
+        "american-express", "capital-one", "hsbc", "lloyds", "barclays",
+        "visa", "mastercard", "paypal", "adyen", "ing"
+    ],
+    "Food": [
+        "coca-cola", "burger-king", "heineken", "cadbury", "five-guys",
+        "pepsi", "kitkat", "dominos", "starbucks", "subway"
+    ],
+    "Healthcare": [
+        "aetna", "alcon", "glaxosmithkline", "cvs"
+    ],
+    "Media": [
+        "netflix", "disney-xd", "cartoon-network", "cnn", "espn",
+        "buzzfeed", "ars-technica", "bbc", "hbo", "spotify", "deezer"
+    ],
+    "Retail": [
+        "amazon", "ebay", "ikea", "best-buy", "carrefour", "alibaba",
+        "barnes-noble", "etsy", "instacart", "deliveroo"
+    ],
+    "Tech": [
+        "google", "alphabet", "adobe", "dropbox", "github", "gitlab", "bitbucket",
+        "ibm", "intel", "hp", "hewlett-packard-enterprise", "dell", "cisco",
+        "atlassian", "digital-ocean", "heroku", "ifttt", "evernote",
+        "slack", "twitter", "facebook", "instagram", "whatsapp", "discord", "reddit"
+    ],
+    "Telecom": [
+        "verizon", "t-mobile", "vodafone", "at-t", "sprint", "orange",
+        "telefónica", "bt-group", "deutsche-telekom"
+    ],
+    "Travel": [
+        "delta-airlines", "airbus", "aer-lingus", "british-airways", "boeing",
+        "arriva", "marriott", "courtyard", "crowne-plaza", "hyatt",
+        "fairfield-inn-suites", "fairmont", "airbnb"
+    ]
+}
