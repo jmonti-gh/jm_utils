@@ -56,6 +56,30 @@ mcolors.BRAND_COLORS = {
     'Western Digital(6)': '#FF0000'
 }
 
+mcolors.PROGRAMMING_COLORS = {
+    "angularjs": "#b52e31", "angularjs-1": "#b52e31", "angularjs-2": "#000000",
+    "django": "#092e20", "django-1": "#092e20",
+    "docker": "#0db7ed", "docker-1": "#0db7ed", "docker-2": "#384d54",
+    "ember": "#f23819", "ember-1": "#f23819",
+    "grunt": "#fba919", "grunt-1": "#fba919", "grunt-2": "#463014",
+    "html5": "#e34f26", "html5-1": "#e34f26",
+    "javascript": "#f7df1e", "javascript-1": "#f7df1e",
+    "jquery": "#0769ad", "jquery-1": "#0769ad", "jquery-2": "#7acef4",
+    "laravel": "#f55247", "laravel-1": "#f55247",
+    "node-js": "#215732", "node-js-1": "#215732", "node-js-2": "#6cc24a", "node-js-3": "#44883e", "node-js-4": "#333333",
+    "npm": "#cb3837", "npm-1": "#cb3837",
+    "php": "#8892be", "php-1": "#8892be", "php-2": "#4f5b93", "php-3": "#99cc99",
+    "python": "#ffde57", "python-1": "#ffde57", "python-2": "#4584b6", "python-3": "#646464",
+    "react": "#00d8ff", "react-1": "#00d8ff",
+    "ruby": "#cc342d", "ruby-1": "#cc342d",
+    "ruby-on-rails": "#cc0000", "ruby-on-rails-1": "#cc0000",
+    "typescript": "#3178c6", "typescript-1": "#3178c6", "typescript-2": "#00273f",
+    "yii-framework": "#d8582b", "yii-framework-1": "#d8582b", "yii-framework-2": "#16a314", "yii-framework-3": "#3b6fba",
+    "vue-js": "#42b883", "vue-js-1": "#42b883", "vue-js-2": "#35495e"
+}
+
+
+
 ## Dictionaries
 COLORS_NAMES_BY_CAT = {
     "BASE_COLORS": (list(mcolors.BASE_COLORS.keys()),
