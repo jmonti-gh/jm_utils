@@ -46,7 +46,7 @@ IndexElement: TypeAlias = Union[str, int, float, pd.Timestamp]
 
 
 ## Dictionaries - Own colors dictionary added to matplotlib
-mcolors.BRAND_COLORS = {
+BRAND_COLORS = {
     '365 DataScience': '#108A99', 'AT&T': '#00A8E0', 'Airbnb': '#FD5C63', 'Alibaba': '#FF6A00', 'Android': '#A4C639', 'Cadbury': '#472F92', 'DELL': '#0085C3', 'Django': '#092E20',
     'Docker(1)': '#0DB7ED', 'Docker(2)': '#384D54', 'E4': '#6D1D7C', 'ESPN': '#FF0033', 'Facebook': '#3B5998', 'Fairmont(1)': '#A6A685', 'Fairmont(2)': '#E32119', 'Ferrari': '#1C396D',
     'Ford': '#4078C0', 'GitHub(1)': '#FCA326', 'GitLab(1)': '#006699', 'IBM': '#F5CB39', 'IKEA(1)': '#FF6600', 'JBL': '#9CB443', 'Khan Academy(1)': '#242F3A', 'Khan Academy(2)': '#DDB321',
@@ -56,7 +56,106 @@ mcolors.BRAND_COLORS = {
     'Western Digital(6)': '#FF0000'
 }
 
-mcolors.PROGRAMMING_COLORS = {
+AUTOMOTIVE_COLORS = {
+    "audi": "#ffffff", "audi-1": "#ffffff", "audi-2": "#000000", "audi-3": "#f50537",
+    "continental-ag": "#ffa500", "continental-ag-1": "#ffa500", "continental-ag-2": "#00a5dc", "continental-ag-3": "#004eaf", "continental-ag-4": "#2db928", "continental-ag-5": "#057855", "continental-ag-6": "#ff2d37", "continental-ag-7": "#000000", "continental-ag-8": "#737373", "continental-ag-9": "#969696", "continental-ag-10": "#cdcdcd", "continental-ag-11": "#f0f0f0",
+    "daimler": "#263f6a", "daimler-1": "#263f6a", "daimler-2": "#182b45", "daimler-3": "#6b0f24", "daimler-4": "#193725", "daimler-5": "#606061",
+    "ferrari": "#e32119", "ferrari-1": "#e32119",
+    "fiat": "#96172e", "fiat-1": "#96172e", "fiat-2": "#6d2d41",
+    "ford": "#1c396d", "ford-1": "#1c396d",
+    "kia": "#c21a30", "kia-1": "#c21a30",
+    "lamborghini": "#ddb321", "lamborghini-1": "#ddb321",
+    "nexar": "#fbb040", "nexar-1": "#fbb040", "nexar-2": "#44355b", "nexar-3": "#31263e", "nexar-4": "#ee5622", "nexar-5": "#221e22",
+    "rolls-royce": "#680021", "rolls-royce-1": "#680021", "rolls-royce-2": "#fffaec", "rolls-royce-3": "#939598", "rolls-royce-4": "#000000",
+    "skoda": "#00800d", "skoda-1": "#00800d",
+    "tesla": "#cc0000", "tesla-1": "#cc0000",
+    "toyota": "#eb0a1e", "toyota-1": "#eb0a1e", "toyota-2": "#ffffff", "toyota-3": "#000000", "toyota-4": "#58595b",
+    "volvo": "#003057", "volvo-1": "#003057", "volvo-2": "#115740", "volvo-3": "#65665c", "volvo-4": "#425563", "volvo-5": "#517891", "volvo-6": "#212721",
+    "webzunder": "#eea642", "webzunder-1": "#eea642"
+}
+
+EDUCATION_COLORS = {
+    '365 DataScience': '#108999', '365 DataScience-1': '#108999', '365 DataScience-2': '#ee4f23', '365 DataScience-3': '#748190', '365 DataScience-4': '#1e9438', '365 DataScience-5': '#175f69', '365 DataScience-6': '#8f2f15', '365 DataScience-7': '#485361', '365 DataScience-8': '#0d6323', '365 DataScience-9': '#9fd0d6',
+    "aiesec": "#037ef3", "aiesec-1": "#037ef3", "aiesec-2": "#f85a40", "aiesec-3": "#00c16e", "aiesec-4": "#7552cc", "aiesec-5": "#0cb9c1", "aiesec-6": "#f48924", "aiesec-7": "#ffc845", "aiesec-8": "#52565e", "aiesec-9": "#caccd1", "aiesec-10": "#f3f4f7",
+    "boise-state-university": "#09347a", "boise-state-university-1": "#09347a", "boise-state-university-2": "#007dc3", "boise-state-university-3": "#0169a4", "boise-state-university-4": "#3399cc", "boise-state-university-5": "#f1632a", "boise-state-university-6": "#464646", "boise-state-university-7": "#b7b7b7", "boise-state-university-8": "#f6f6f5",
+    "clemson-university": "#f66733", "clemson-university-1": "#f66733", "clemson-university-2": "#522d80", "clemson-university-3": "#d4c99e", "clemson-university-4": "#685c53", "clemson-university-5": "#a25016", "clemson-university-6": "#562e19", "clemson-university-7": "#86898c", "clemson-university-8": "#f9e498", "clemson-university-9": "#566127", "clemson-university-10": "#3a4958", "clemson-university-11": "#b5c327", "clemson-university-12": "#109dc0",
+    "code-school": "#616f67", "code-school-1": "#616f67", "code-school-2": "#c68143",
+    "codecademy": "#f65a5b", "codecademy-1": "#f65a5b", "codecademy-2": "#204056",
+    "duke-university": "#001a57", "duke-university-1": "#001a57", "duke-university-2": "#003366",
+    "duolingo": "#7ac70c", "duolingo-1": "#7ac70c", "duolingo-2": "#8ee000", "duolingo-3": "#faa918", "duolingo-4": "#ffc715", "duolingo-5": "#d33131", "duolingo-6": "#e53838", "duolingo-7": "#1cb0f6", "duolingo-8": "#14d4f4", "duolingo-9": "#8549ba", "duolingo-10": "#a560e8", "duolingo-11": "#4c4c4c", "duolingo-12": "#6f6f6f", "duolingo-13": "#cfcfcf", "duolingo-14": "#f0f0f0", "duolingo-15": "#bff199", "duolingo-16": "#f7c8c9",
+    "freecodecamp": "#006400", "freecodecamp-1": "#006400", "freecodecamp-2": "#ff9c2a", "freecodecamp-3": "#ff4025", "freecodecamp-4": "#3949ab", "freecodecamp-5": "#efefef",
+    "goethe": "#a5c500", "goethe-1": "#a5c500", "goethe-2": "#810061", "goethe-3": "#303600", "goethe-4": "#ec6400", "goethe-5": "#d4c78c", "goethe-6": "#5ec6f2", "goethe-7": "#003468", "goethe-8": "#4b1702", "goethe-9": "#717a83",
+    "khan-academy": "#9cb443", "khan-academy-1": "#9cb443", "khan-academy-2": "#242f3a",
+    "massachusetts-institute-of-technology": "#a31f34", "massachusetts-institute-of-technology-1": "#a31f34", "massachusetts-institute-of-technology-2": "#8a8b8c", "massachusetts-institute-of-technology-3": "#c2c0bf",
+    "montclair-state-university": "#ce1141", "montclair-state-university-1": "#ce1141", "montclair-state-university-2": "#eeb111", "montclair-state-university-3": "#e87d1e", "montclair-state-university-4": "#94ce08", "montclair-state-university-5": "#00386b", "montclair-state-university-6": "#969491",
+    "msu": "#18453b", "msu-1": "#18453b", "msu-2": "#000000", "msu-3": "#ffffff", "msu-4": "#008208", "msu-5": "#7bbd00", "msu-6": "#0b9a6d",
+    "oxford-university-press": "#002147", "oxford-university-press-1": "#002147", "oxford-university-press-2": "#000000", "oxford-university-press-3": "#666666",
+    "pearson": "#ed6b06", "pearson-1": "#ed6b06", "pearson-2": "#9d1348", "pearson-3": "#008b5d", "pearson-4": "#364395",
+    "portfolium": "#0099ff", "portfolium-1": "#0099ff", "portfolium-2": "#fb0a2a", "portfolium-3": "#17ad49", "portfolium-4": "#333333",
+    "quizlet": "#4257b2", "quizlet-1": "#4257b2", "quizlet-2": "#3ccfcf", "quizlet-3": "#f0f0f0",
+    "rit": "#f76902", "rit-1": "#f76902", "rit-2": "#ffffff", "rit-3": "#000000",
+    "rochester-institute-of-technology": "#f36e21", "rochester-institute-of-technology-1": "#f36e21", "rochester-institute-of-technology-2": "#513127",
+    "rosetta-stone": "#0098db", "rosetta-stone-1": "#0098db", "rosetta-stone-2": "#ecc400",
+    "rowan-university": "#3f1a0a", "rowan-university-1": "#3f1a0a", "rowan-university-2": "#edd51c",
+    "rutgers-university": "#cc0033", "rutgers-university-1": "#cc0033",
+    "seton-hall-university": "#004488", "seton-hall-university-1": "#004488",
+    "skillshare": "#f26b21", "skillshare-1": "#f26b21", "skillshare-2": "#68b8be",
+    "studyblue": "#00afe1", "studyblue-1": "#00afe1",
+    "temple": "#a41e35", "temple-1": "#a41e35", "temple-2": "#222222", "temple-3": "#899197",
+    "texas-am-university": "#500000", "texas-am-university-1": "#500000", "texas-am-university-2": "#003c71", "texas-am-university-3": "#5b6236", "texas-am-university-4": "#744f28", "texas-am-university-5": "#998542", "texas-am-university-6": "#332c2c", "texas-am-university-7": "#707373", "texas-am-university-8": "#d6d3c4",
+    "texas-tech-university": "#cc0000", "texas-tech-university-1": "#cc0000", "texas-tech-university-2": "#000000",
+    "the-college-of-new-jersey": "#293f6f", "the-college-of-new-jersey-1": "#293f6f", "the-college-of-new-jersey-2": "#a67a00",
+    "treehouse": "#6fbc6d", "treehouse-1": "#6fbc6d", "treehouse-2": "#47535b",
+    "uc-berkeley": "#003262", "uc-berkeley-1": "#003262", "uc-berkeley-2": "#3b7ea1", "uc-berkeley-3": "#fdb515", "uc-berkeley-4": "#c4820e",
+    "ucsf": "#052049", "ucsf-1": "#052049", "ucsf-2": "#18a3ac", "ucsf-3": "#90bd31", "ucsf-4": "#178ccb", "ucsf-5": "#f48024",
+    "universitat-hamburg": "#e2001a", "universitat-hamburg-1": "#e2001a", "universitat-hamburg-2": "#009cd1", "universitat-hamburg-3": "#3b515b",
+    "university-of-cambridge": "#d6083b", "university-of-cambridge-1": "#d6083b", "university-of-cambridge-2": "#0072cf", "university-of-cambridge-3": "#ea7125", "university-of-cambridge-4": "#55a51c", "university-of-cambridge-5": "#8f2bbc", "university-of-cambridge-6": "#00b1c1",
+    "xavier-university": "#0c2340", "xavier-university-1": "#0c2340", "xavier-university-2": "#9ea2a2", "xavier-university-3": "#0099cc"
+}
+
+FINANCIAL_COLORS = {
+    "adyen": "#0abf53", "adyen-1": "#0abf53", "adyen-2": "#00112c",
+    "american-express": "#002663", "american-express-1": "#002663", "american-express-2": "#4d4f53",
+    "amp": "#1c79c0", "amp-1": "#1c79c0", "amp-2": "#0dd3ff", "amp-3": "#0389ff",
+    "barclays": "#00aeef", "barclays-1": "#00aeef", "barclays-2": "#00395d",
+    "blockchain": "#123962", "blockchain-1": "#123962", "blockchain-2": "#2754ba", "blockchain-3": "#00aee6", "blockchain-4": "#799eb2", "blockchain-5": "#b1d4e5",
+    "capital-one": "#004977", "capital-one-1": "#004977", "capital-one-2": "#d03027",
+    "diebold": "#007dc3", "diebold-1": "#007dc3", "diebold-2": "#003f69", "diebold-3": "#954010", "diebold-4": "#445c6e", "diebold-5": "#005238", "diebold-6": "#97824b",
+    "dwolla": "#ff7404", "dwolla-1": "#ff7404",
+    "etrade": "#6633cc", "etrade-1": "#6633cc", "etrade-2": "#99cc00",
+    "flattr": "#f67c1a", "flattr-1": "#f67c1a", "flattr-2": "#338d11",
+    "gittip": "#663300", "gittip-1": "#663300", "gittip-2": "#339966",
+    "hellowallet": "#0093d0", "hellowallet-1": "#0093d0",
+    "hsbc": "#db0011", "hsbc-1": "#db0011",
+    "ideal": "#cc0066", "ideal-1": "#cc0066", "ideal-2": "#79afc1", "ideal-3": "#000000",
+    "indiegogo": "#eb1478", "indiegogo-1": "#eb1478",
+    "ing": "#ff6200", "ing-1": "#ff6200", "ing-2": "#000066",
+    "intuit": "#365ebf", "intuit-1": "#365ebf",
+    "kickstarter": "#2bde73", "kickstarter-1": "#2bde73", "kickstarter-2": "#0f2105",
+    "kiwipay": "#00b0df", "kiwipay-1": "#00b0df",
+    "lloyds": "#d81f2a", "lloyds-1": "#d81f2a", "lloyds-2": "#ff9900", "lloyds-3": "#e0d86e", "lloyds-4": "#9ea900", "lloyds-5": "#6ec9e0", "lloyds-6": "#007ea3", "lloyds-7": "#9e4770", "lloyds-8": "#631d76", "lloyds-9": "#1e1e1e",
+    "localbitcoins-com": "#006fbf", "localbitcoins-com-1": "#006fbf", "localbitcoins-com-2": "#ff7b00",
+    "mastercard": "#eb001b", "mastercard-1": "#eb001b", "mastercard-2": "#ff5f00", "mastercard-3": "#f79e1b",
+    "mollie": "#c6d6df", "mollie-1": "#c6d6df", "mollie-2": "#ec4534",
+    'MTM': '#113D76', 'MTM-1': '#113D76', 'MTM-2': '#D8630E', 'MTM-3': '#545559', 'MTM-4': '#161616', 'MTM-5': '#f4f4f4', 'MTM-6': '#FF7F22', 'MTM-7': '#1091EF', 'MTM-8': '#222222', 'MTM-9': '#b4b5bb', 'MTM-10': '#ffffff', 'MTM-11': '#00000012', 'MTM-12': '#0363AA', 'MTM-13': '#0A2540', 'MTM-14': '#0A254080',
+    "n26": "#2b697a", "n26-1": "#2b697a", "n26-2": "#000000", "n26-3": "#ffffff",
+    "paymill": "#f05000", "paymill-1": "#f05000",
+    "paypal": "#003087", "paypal-1": "#003087", "paypal-2": "#009cde", "paypal-3": "#012169",
+    "qonto": "#6b5aed", "qonto-1": "#6b5aed", "qonto-2": "#262a3e", "qonto-3": "#fafafc", "qonto-4": "#63ebe4",
+    "realex-payments": "#f29023", "realex-payments-1": "#f29023", "realex-payments-2": "#4d5255",
+    "square-cash": "#28c101", "square-cash-1": "#28c101",
+    "stripe": "#00afe1", "stripe-1": "#00afe1",
+    "suntrust": "#00447c", "suntrust-1": "#00447c", "suntrust-2": "#fdb913", "suntrust-3": "#e36f1e",
+    "turbotax": "#355ebe", "turbotax-1": "#355ebe", "turbotax-2": "#d52b1d",
+    "virgin-money": "#cc0000", "virgin-money-1": "#cc0000", "virgin-money-2": "#333333", "virgin-money-3": "#a93c3b", "virgin-money-4": "#a896a0", "virgin-money-5": "#7a3671", "virgin-money-6": "#bd1d65",
+    "visa": "#1a1f71", "visa-1": "#1a1f71", "visa-2": "#f7b600",
+    "wave-apps": "#1c2d37", "wave-apps-1": "#1c2d37", "wave-apps-2": "#4ec7c4", "wave-apps-3": "#00959f", "wave-apps-4": "#3b9bcc",
+    "worldline": "#0066a1", "worldline-1": "#0066a1",
+    "xero": "#06b3e8", "xero-1": "#06b3e8", "xero-2": "#000000", "xero-3": "#ffffff", "xero-4": "#7a7e85",
+    "y-combinator": "#ff4000", "y-combinator-1": "#ff4000"
+}
+
+PROGRAMMING_COLORS = {
     "angularjs": "#b52e31", "angularjs-1": "#b52e31", "angularjs-2": "#000000",
     "django": "#092e20", "django-1": "#092e20",
     "docker": "#0db7ed", "docker-1": "#0db7ed", "docker-2": "#384d54",
@@ -78,7 +177,7 @@ mcolors.PROGRAMMING_COLORS = {
     "vue-js": "#42b883", "vue-js-1": "#42b883", "vue-js-2": "#35495e"
 }
 
-
+dict_list = [AUTOMOTIVE_COLORS, EDUCATION_COLORS, FINANCIAL_COLORS, PROGRAMMING_COLORS]
 
 ## Dictionaries
 COLORS_NAMES_BY_CAT = {
