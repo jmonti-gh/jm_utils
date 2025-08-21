@@ -281,7 +281,28 @@ CMAP_NAMES_BY_CAT = {
 
 
 ## Functions
+def get_hex_color(nombre: str):
+    "Function that returns the hex_val of the color 'name' to be used in graphics."
+    for dic in dict_list:
+        if nombre in dic:
+            return dic[nombre]
+        if nombre.capitalize() in dic:
+            return dic[nombre.capitalize()]
+        if nombre.casefold() in dic:
+            return dic[nombre.casefold()]
+        if nombre.upper() in dic:
+            return dic[nombre.upper()]
+
+    return None
+
+
+def get_named_colors_mapping():
+    """ Function that returns a mapping of named colors to their hex values. """
+    return {**AUTOMOTIVE_COLORS, **EDUCATION_COLORS, **FINANCIAL_COLORS, **PROGRAMMING_COLORS}
+
+
 def register_mpl_palette(cmap_name, cmap, n_bins=256):
+    """ Function that register a custom palette (cmap) to Matplotlib """
     if cmap_name not in colormaps():
         cmap_custom = mcolors.LinearSegmentedColormap.from_list(cmap_name, cmap, N=n_bins)
         plt.colormaps.register(cmap_custom)
@@ -334,7 +355,25 @@ def get_color_hex_list(palette: str, n_colors: Optional[int] = 10) -> list[str]:
         return [mcolors.rgb2hex(color[:3]) for color in colors_rgba]
     
 
-def plot_mpl_colors(
+def plot_a_color(name: str):
+    """Function to plot a color by name."""
+
+    mpl_colors = mcolors.get_named_colors_mapping()
+    if name in mpl_colors:
+        color = mpl_colors[name]
+    else:
+        color = get_hex_color(name)  # Try to get the color from the custom dictionaries
+
+    if color:
+        fig, ax = plt.subplots(figsize=(2, 2))
+        ax.add_patch(Rectangle(xy=(0, 0), width=1, height=1, color=color))
+        return fig, ax
+    else:
+        print(f"Color '{name}' not found.")
+        return None, None
+
+
+def plot_colors(
         color_group: Optional[str | list[str]] = 'SAMPLE',
         alpha: Optional[float | None] = None,
         n_cols: Optional[int] = 6,
