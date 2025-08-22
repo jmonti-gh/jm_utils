@@ -177,10 +177,10 @@ PROGRAMMING_COLORS = {
     "vue-js": "#42b883", "vue-js-1": "#42b883", "vue-js-2": "#35495e"
 }
 
-dict_list = [AUTOMOTIVE_COLORS, EDUCATION_COLORS, FINANCIAL_COLORS, PROGRAMMING_COLORS]
+# dict_list = [AUTOMOTIVE_COLORS, EDUCATION_COLORS, FINANCIAL_COLORS, PROGRAMMING_COLORS]
 
 ## Dictionaries
-COLORS_NAMES_BY_CAT = {
+COLORS_NAMES_BY_GROUP = {
     "BASE_COLORS": (list(mcolors.BASE_COLORS.keys()),
                     """One letter color names: 'b'lue, 'g'reen, 'r'ed, 'c'yan, 'm'agenta, 'y'ellow, blac'k', 'w'hite
                     The colors g, c, m, and y do not coincide with X11/CSS4 colors. Their particular shades were chosen for better visibility of 
@@ -189,20 +189,22 @@ COLORS_NAMES_BY_CAT = {
                     "Case-insensitive X11/CSS4 color name with no spaces"),
     'TABLEAU_COLORS': (list(mcolors.TABLEAU_COLORS.keys()),
                     "Tableau Palette"),
-    'BRAND_COLORS': ([
-        '#108A99', '#00A8E0', '#FD5C63', '#FF6A00', '#A4C639', '#472F92', '#0085C3', '#092E20', '#0DB7ED', '#384D54',
-        '#6D1D7C', '#FF0033', '#3B5998', '#A6A685', '#E32119', '#1C396D', '#4078C0', '#FCA326', '#006699', '#F5CB39',
-        '#FF6600', '#9CB443', '#242F3A', '#DDB321', '#0A66C2', '#0A3A6C', '#113D76', '#D6682D', '#D8630E', '#00A1F1',
-        '#589636', '#5C92FA', '#00758F', '#F29111', '#FFCC00', '#000000', '#08107B', '#DFB226', '#777777', '#8892BE',
-        '#4F5B93', '#99CC99', '#FFDE57', '#4584B6', '#646464', '#25D366', '#9D0A0E', '#003369', '#FF0000'
-        ],
-        """365 DataScience, AT&T, Airbnb, Alibaba, Android, Cadbury, DELL, Django, Docker(1), Docker(2), E4, ESPN, Facebook, Fairmont(1),
-        Fairmont(2), Ferrari, Ford, GitHub(1), GitLab(1), IBM, IKEA(1), JBL, Khan Academy(1), Khan Academy(2), Lamborghini, LinkedIn(1),
-        MTM(1), MTM(2), MTM(3), MTM(4), Microsoft, MongoDB, Motorola, MySQL(1), MySQL(2), National Geographic(1), National Geographic(2),
-        Olympus(1), Olympus(2), Olympus(3), PHP(1), PHP(2), PHP(3), Python(1), Python(2), Python(3), Wathsapp, Western Digital(5),
-        Western Digital(6), Youtube(1)"""),
+    # 'BRAND_COLORS': ([
+    #     '#108A99', '#00A8E0', '#FD5C63', '#FF6A00', '#A4C639', '#472F92', '#0085C3', '#092E20', '#0DB7ED', '#384D54',
+    #     '#6D1D7C', '#FF0033', '#3B5998', '#A6A685', '#E32119', '#1C396D', '#4078C0', '#FCA326', '#006699', '#F5CB39',
+    #     '#FF6600', '#9CB443', '#242F3A', '#DDB321', '#0A66C2', '#0A3A6C', '#113D76', '#D6682D', '#D8630E', '#00A1F1',
+    #     '#589636', '#5C92FA', '#00758F', '#F29111', '#FFCC00', '#000000', '#08107B', '#DFB226', '#777777', '#8892BE',
+    #     '#4F5B93', '#99CC99', '#FFDE57', '#4584B6', '#646464', '#25D366', '#9D0A0E', '#003369', '#FF0000'
+    #     ],
+    #     """365 DataScience, AT&T, Airbnb, Alibaba, Android, Cadbury, DELL, Django, Docker(1), Docker(2), E4, ESPN, Facebook, Fairmont(1),
+    #     Fairmont(2), Ferrari, Ford, GitHub(1), GitLab(1), IBM, IKEA(1), JBL, Khan Academy(1), Khan Academy(2), Lamborghini, LinkedIn(1),
+    #     MTM(1), MTM(2), MTM(3), MTM(4), Microsoft, MongoDB, Motorola, MySQL(1), MySQL(2), National Geographic(1), National Geographic(2),
+    #     Olympus(1), Olympus(2), Olympus(3), PHP(1), PHP(2), PHP(3), Python(1), Python(2), Python(3), Wathsapp, Western Digital(5),
+    #     Western Digital(6), Youtube(1)"""),
     'XKCD_COLORS': (list(mcolors.XKCD_COLORS.keys()),
             "The 954 most common RGB monitor colors, as defined by several hundred thousand participants in the xkcd color name survey"),
+    'AUTOMOTIVE_COLORS': (list(AUTOMOTIVE_COLORS.keys()),
+                          " Automotive brands colors")
 }
 
 
@@ -281,25 +283,25 @@ CMAP_NAMES_BY_CAT = {
 
 
 ## Functions
-def get_hex_color(nombre: str):
-    "Function that returns the hex_val of the color 'name' to be used in graphics."
-    for dic in dict_list:
-        if nombre in dic:
-            return dic[nombre]
-        if nombre.capitalize() in dic:
-            return dic[nombre.capitalize()]
-        if nombre.casefold() in dic:
-            return dic[nombre.casefold()]
-        if nombre.upper() in dic:
-            return dic[nombre.upper()]
-
-    return None
-
-
 def get_named_colors_mapping():
     """ Function that returns a mapping of named colors to their hex values. """
     return {**AUTOMOTIVE_COLORS, **EDUCATION_COLORS, **FINANCIAL_COLORS, **PROGRAMMING_COLORS}
 
+def get_hex_color(color_name: str):
+    "Function that returns the hex_val of the color 'name' to be used in graphics."
+
+    jm_colors = get_named_colors_mapping()
+    mpl_hex_colors = {**mcolors.CSS4_COLORS, **mcolors.TABLEAU_COLORS, **mcolors.XKCD_COLORS}
+
+    if color_name in jm_colors:
+        return jm_colors[color_name]
+    elif color_name in mpl_hex_colors:
+        return mpl_hex_colors[color_name]
+    elif color_name in mcolors.BASE_COLORS:
+        return mcolors.rgb2hex(color_name)
+    else:
+        return None
+    
 
 def register_mpl_palette(cmap_name, cmap, n_bins=256):
     """ Function that register a custom palette (cmap) to Matplotlib """
@@ -355,22 +357,25 @@ def get_color_hex_list(palette: str, n_colors: Optional[int] = 10) -> list[str]:
         return [mcolors.rgb2hex(color[:3]) for color in colors_rgba]
     
 
-def plot_a_color(name: str):
+def ax_one_color(ax: plt.Axes, color_name: str) -> plt.Axes:
+    """Function build an ax that is a rectangle of the color_name"""
+
+    if color_name in get_named_colors_mapping():
+        color = get_hex_color(color_name)  # Try to get the color from the custom dictionaries
+    else:
+        color = color_name
+    
+    ax.add_patch(Rectangle(xy=(0, 0), width=1, height=1, color=color))
+    ax.set_axis_off()
+    return ax
+
+
+def plot_a_color(color_name: str): # -> tuple(plt.Figure, plt.Axes):
     """Function to plot a color by name."""
 
-    mpl_colors = mcolors.get_named_colors_mapping()
-    if name in mpl_colors:
-        color = mpl_colors[name]
-    else:
-        color = get_hex_color(name)  # Try to get the color from the custom dictionaries
-
-    if color:
-        fig, ax = plt.subplots(figsize=(2, 2))
-        ax.add_patch(Rectangle(xy=(0, 0), width=1, height=1, color=color))
-        return fig, ax
-    else:
-        print(f"Color '{name}' not found.")
-        return None, None
+    fig, ax = plt.subplots(figsize=(2, 2))
+    ax_one_color(ax, color_name)
+    return fig, ax
 
 
 def plot_colors(
