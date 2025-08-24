@@ -45,17 +45,7 @@ IndexElement: TypeAlias = Union[str, int, float, pd.Timestamp]
 # IndexElement: TypeAlias = Union[str, int, float, 'datetime.datetime', np.str_, np.int64, np.float64, np.datetime64, pd.Timestamp, ...]
 
 
-## Dictionaries - Own colors dictionary added to matplotlib
-BRAND_COLORS = {
-    '365 DataScience': '#108A99', 'AT&T': '#00A8E0', 'Airbnb': '#FD5C63', 'Alibaba': '#FF6A00', 'Android': '#A4C639', 'Cadbury': '#472F92', 'DELL': '#0085C3', 'Django': '#092E20',
-    'Docker(1)': '#0DB7ED', 'Docker(2)': '#384D54', 'E4': '#6D1D7C', 'ESPN': '#FF0033', 'Facebook': '#3B5998', 'Fairmont(1)': '#A6A685', 'Fairmont(2)': '#E32119', 'Ferrari': '#1C396D',
-    'Ford': '#4078C0', 'GitHub(1)': '#FCA326', 'GitLab(1)': '#006699', 'IBM': '#F5CB39', 'IKEA(1)': '#FF6600', 'JBL': '#9CB443', 'Khan Academy(1)': '#242F3A', 'Khan Academy(2)': '#DDB321',
-    'Lamborghini': '#0A66C2', 'LinkedIn(1)': '#0A3A6C', 'MTM(1)': '#113D76', 'MTM(2)': '#D6682D', 'MTM(3)': '#D8630E', 'MTM(4)': '#00A1F1', 'Microsoft': '#589636','MongoDB': '#5C92FA',
-    'Motorola': '#00758F', 'MySQL(1)': '#F29111', 'MySQL(2)': '#FFCC00', 'National Geographic(1)': '#000000', 'National Geographic(2)': '#08107B', 'Olympus(1)': '#DFB226', 'Olympus(2)': '#777777', 'Olympus(3)': '#8892BE',
-    'PHP(1)': '#4F5B93', 'PHP(2)': '#99CC99', 'PHP(3)': '#FFDE57', 'Python(1)': '#4584B6', 'Python(2)': '#646464', 'Python(3)': '#25D366', 'WhatsApp': '#9D0A0E', 'Western Digital(5)': '#003369',
-    'Western Digital(6)': '#FF0000'
-}
-
+## Dictionaries - Own colors dictionaries added to matplotlib | Similar to 'TABLEAU_COLORS' or 'CCS4_COLORS'
 AUTOMOTIVE_COLORS = {
     "audi": "#ffffff", "audi-2": "#000000", "audi-3": "#f50537",
     "continental-ag": "#ffa500", "continental-ag-2": "#00a5dc", "continental-ag-3": "#004eaf", "continental-ag-4": "#2db928", "continental-ag-5": "#057855", "continental-ag-6": "#ff2d37", "continental-ag-7": "#000000", "continental-ag-8": "#737373", "continental-ag-9": "#969696", "continental-ag-10": "#cdcdcd", "continental-ag-11": "#f0f0f0",
@@ -176,28 +166,7 @@ PROGRAMMING_COLORS = {
     "vue-js": "#42b883", "vue-js-2": "#35495e"
 }
 
-## Dictionaries
-COLORS_NAMES_BY_GROUP = {
-    "BASE_COLORS": (list(mcolors.BASE_COLORS.keys()),
-                    """One letter color names: 'b'lue, 'g'reen, 'r'ed, 'c'yan, 'm'agenta, 'y'ellow, blac'k', 'w'hite
-                    The colors g, c, m, and y do not coincide with X11/CSS4 colors. Their particular shades were chosen for better visibility of 
-                    colored lines against typical backgrounds"""),
-    'CSS4_COLORS': (list(mcolors.CSS4_COLORS.keys()),
-                    "Case-insensitive X11/CSS4 color name with no spaces"),
-    'TABLEAU_COLORS': (list(mcolors.TABLEAU_COLORS.keys()),
-                    "Tableau Palette"),
-    'XKCD_COLORS': (list(mcolors.XKCD_COLORS.keys()),
-            "The 954 most common RGB monitor colors, as defined by several hundred thousand participants in the xkcd color name survey"),
-    'AUTOMOTIVE_COLORS': (list(AUTOMOTIVE_COLORS.keys()),
-                          " Automotive brands colors"),
-    'EDUCATION_COLORS': (list(EDUCATION_COLORS.keys()),
-                        "Educational institutions colors"),
-    'FINANCIAL_COLORS': (list(FINANCIAL_COLORS.keys()),
-                         "Financial institutions colors"),
-    'PROGRAMMING_COLORS': (list(PROGRAMMING_COLORS.keys()),
-                          "Programming languages colors")
-}
-
+## Dictionaries - Own palettes (colormaps) dictionary added (and register) to matplotlib | Similar to 'Accent', 'Set2', 'Tab20', etc
 JM_QUALITATIVE_CMAPS = {
     'colorblind': ['#0173B2', '#DE8F05', '#029E73', '#D55E00', '#CC78BC', '#CA9161', '#FBAFE4', '#949494', '#ECE133',
                    '#56B4E9', '#5D8C3B', '#A93967', '#888888', '#FFC107', '#7C9680', '#E377C2', '#BCBD22', '#AEC7E8',
@@ -215,6 +184,27 @@ JM_QUALITATIVE_CMAPS = {
                        "#6736a9", "#ff59c2", "#ffdf87"]
 }
 
+## Dictionaries - Colors and palettes grouped by category and with comments. Own colors without counterparts in matplotlib.
+COLORS_NAMES_BY_GROUP = {
+    "BASE_COLORS": (list(mcolors.BASE_COLORS.keys()),
+                    """One letter color names: 'b'lue, 'g'reen, 'r'ed, 'c'yan, 'm'agenta, 'y'ellow, blac'k', 'w'hite
+                    The colors g, c, m, and y do not coincide with X11/CSS4 colors. Their particular shades were chosen for better visibility of 
+                    colored lines against typical backgrounds"""),
+    'CSS4_COLORS': (list(mcolors.CSS4_COLORS.keys()),
+                    "Case-insensitive X11/CSS4 color name with no spaces"),
+    'TABLEAU_COLORS': (list(mcolors.TABLEAU_COLORS.keys()),
+                    "Tableau Palette"),
+    'XKCD_COLORS': (list(mcolors.XKCD_COLORS.keys()),
+            "The 954 most common RGB monitor colors, as defined by several hundred thousand participants in the xkcd color name survey"),
+    'AUTOMOTIVE_COLORS': (list(AUTOMOTIVE_COLORS.keys()),
+                          "Automotive brands colors (They must be called by their hexadecimal value, jm_utils.data.mpl_tints.to_hex('color_name'))"),
+    'EDUCATION_COLORS': (list(EDUCATION_COLORS.keys()),
+                        "Educational institutions colors (They must be called by their hexadecimal value, jm_utils.data.mpl_tints.to_hex('color_name'))"),
+    'FINANCIAL_COLORS': (list(FINANCIAL_COLORS.keys()),
+                         "Financial institutions colors (They must be called by their hexadecimal value, jm_utils.data.mpl_tints.to_hex('color_name'))"),
+    'PROGRAMMING_COLORS': (list(PROGRAMMING_COLORS.keys()),
+                          "Programming languages colors (They must be called by their hexadecimal value, jm_utils.data.mpl_tints.to_hex('color_name'))"),
+}
 
 CMAP_NAMES_BY_CAT = {
         "Cyclic": ([
@@ -281,7 +271,7 @@ def get_named_colors_mapping(include_mcolors: Optional[bool] = False) -> dict[st
 
     
 def to_hex(
-        color:  str | tuple[float, float, float] | tuple[int, int, int] | mcolors.ColorConverter | mcolors.Colormap,
+        color:  str | tuple[float, float, float] | tuple[float, float, float, float] | tuple[str, float],
         keep_alpha: bool = False
 ) -> str | None:
     "Function that returns the hex_val of the color 'name' to be used in graphics."
@@ -290,11 +280,10 @@ def to_hex(
     
     if isinstance(color, str) and color in jm_colors:
         return jm_colors[color]
-    else:
-        return mcolors.to_hex(color, keep_alpha=keep_alpha)
+    return mcolors.to_hex(color, keep_alpha=keep_alpha)
 
 
-def register_mpl_palette(cmap_name, cmap, n_bins=256):
+def register_mpl_palette(cmap_name: str, cmap: list, n_bins=256):
     """ Function that register a custom palette (cmap) to Matplotlib """
     if cmap_name not in colormaps():
         cmap_custom = mcolors.LinearSegmentedColormap.from_list(cmap_name, cmap, N=n_bins)
@@ -302,7 +291,7 @@ def register_mpl_palette(cmap_name, cmap, n_bins=256):
         return cmap_custom
 
 
-def get_color_hex_list(palette: str, n_colors: Optional[int] = 10) -> list[str]:
+def get_color_hex_list_from_pltt(palette: str, n_colors: Optional[int] = 10) -> list[str]:
     """
     Returns a list of hex color codes from a specified Matplotlib colormap or a named palette.
 
@@ -348,24 +337,22 @@ def get_color_hex_list(palette: str, n_colors: Optional[int] = 10) -> list[str]:
         return [mcolors.rgb2hex(color[:3]) for color in colors_rgba]
     
 
-def ax_one_color(ax: plt.Axes, color_name: str) -> plt.Axes:
+def ax_one_color(ax: plt.Axes, color: str | tuple | list) -> plt.Axes:
     """Function build an ax that is a rectangle of the color_name"""
 
-    if color_name in get_named_colors_mapping():
-        color = to_hex(color_name)  # Try to get the color from the custom dictionaries
-    else:
-        color = color_name
+    if isinstance(color, str) and color in get_named_colors_mapping():
+        color = to_hex(color)                               # Try to get the color from the custom dictionaries
     
     ax.add_patch(Rectangle(xy=(0, 0), width=1, height=1, color=color))
     ax.set_axis_off()
     return ax
 
 
-def plot_a_color(color_name: str): # -> tuple(plt.Figure, plt.Axes):
+def plot_a_color(color: str | tuple | list) -> tuple[plt.Figure, plt.Axes]:
     """Function to plot a color by name."""
 
     fig, ax = plt.subplots(figsize=(2, 2))
-    ax_one_color(ax, color_name)
+    ax_one_color(ax, color)
     return fig, ax
 
 
@@ -376,15 +363,73 @@ def plot_colors(
         sort_colors: Optional[bool] = True,
         hex_value: Optional[bool] = False
 ) -> tuple[plt.Figure, plt.Axes]:
+    """
+    Displays a visual grid of named Matplotlib colors, organized by category or custom list.
+
+    This function creates a figure showing color swatches with their names for a selected group
+    of named colors. It supports built-in categories, a representative sample, a full list of
+    category names, or a custom list of colors. Colors can be sorted by hue and displayed with
+    their hexadecimal values.
+
+    Parameters:
+        color_group (str or list[str], optional): Specifies which colors to display.
+            - If str: one of the built-in groups (e.g., 'CSS4_COLORS', 'TABLEAU_COLORS')
+              or special options:
+              - 'SAMPLE': Shows a selection from all main categories.
+              - 'NAMES': Displays a text list of all available color names by category.
+              - 'FIND <term1> <term2> ...': Searches for colors containing the terms.
+            - If list: A custom list of color names or hex codes to display.
+            Case is insensitive for string inputs. Default is 'SAMPLE'.
+
+        alpha (float or None, optional): Transparency level for the color swatches.
+            If None, the color's default alpha is used. Default is None.
+
+        n_cols (int, optional): Number of columns in the color grid. Default is 6.
+
+        sort_colors (bool, optional): If True, sorts colors by hue, saturation, and value
+            for a more visually organized layout. Default is True.
+
+        hex_value (bool, optional): If True, displays the hexadecimal value of each color
+            alongside its name. Default is False.
+
+    Returns:
+        tuple[matplotlib.figure.Figure, matplotlib.axes.Axes]: A tuple containing:
+            - fig: The matplotlib Figure object.
+            - ax: The Axes object with the color grid.
+
+    Raises:
+        TypeError: If `color_group` is not a string or list of strings.
+        ValueError: If `color_group` is a string but not a recognized category or option.
+
+    Notes:
+        - Invalid color names are handled gracefully and may appear as 'none'.
+        - The layout adapts to the number of colors and columns.
+        - Uses `mtints.COLORS_NAMES_BY_GROUP` and `mtints.to_hex` internally.
+        - Ideal for exploring, comparing, and selecting named colors for data visualization.
+
+    Example:
+        >>> plot_colors('TABLEAU_COLORS')
+        # Displays all Tableau colors.
+
+        >>> plot_colors(['red', 'blue', '#00FF00'], hex_value=True)
+        # Shows a custom list of colors with their hex values.
+
+        >>> plot_colors('FIND blue green')
+        # Searches for and displays colors with 'blue' or 'green' in their names.
+
+        >>> plot_colors()
+        # Shows a default sample of colors from various categories.
+    """
     
     # Build the dictionary containing the color names sorted by category (dict key)
-    colors_by_category_dic = COLORS_NAMES_BY_CAT
+    colors_by_group_dic = COLORS_NAMES_BY_GROUP.copy()
 
-    # Add 'SAMPLE' key entry to colors_by_category_dic, value: (Sample of 8 colors of e/category, and a Description)
-    list_of_pltt_lists = [value[0] for value in colors_by_category_dic.values()]              # Needed as source of data to get a random sample of 4 palettes of e/category
-    colors_by_category_dic['SAMPLE'] = (                                                      # Added 'Sample' dict_key
-        [color for c_g in list_of_pltt_lists for color in random.sample(c_g, k=8)],           # A random sample of 8 of e/category
-        "8 colors of e/category: 8 BASE_COLORS, 8 CSS4_COLORS, 8 TABLEAU_COLORS, 8 XKCD_COLORS")
+    # Add 'SAMPLE' key entry to colors_by_group_dic, value: (Sample of 8 colors of e/category, and a Description)
+    list_of_list_of_names = [value[0] for value in colors_by_group_dic.values()]            # Needed as source of data to get a random sample of 4 palettes of e/category
+    colors_by_group_dic['SAMPLE'] = (                                                       # Added 'Sample' dict_key
+        [color for c_g in list_of_list_of_names for color in random.sample(c_g, k=8)],      # A random sample of 8 of e/category
+        """8 colors of e/category: 8 BASE_COLORS, 8 CSS4_COLORS, 8 TABLEAU_COLORS, 8 XKCD_COLORS,
+        8 AUTOMOTIVE_COLORS, 8 EDUCATION_COLORS, 8 FINANCIAL_COLORS, 8 PROGRAMMING_COLORS""")
 
     # First internal aux. funct. _plot_dic(): generates a figure containing the names of the palettes according to their category
     def _show_dic(dic):
@@ -393,8 +438,8 @@ def plot_colors(
             if group_name == 'SAMPLE':          # Sample list is not showed
                 continue
             sp, ncols = 21, 10                  # sp: space between color names, n_cols: number of columns
-            if group_name == 'XKCD_COLORS':
-                sp, ncols = 27, 8               # Grater space between color names and less columns
+            if group_name == 'XKCD_COLORS' or group_name == 'EDUCATION_COLORS':
+                sp, ncols = 27, 8               # Greater space between color names and less columns
                 
             all_text += f"* {group_name} ({len(color_list)}).- {description}:\n"    # Category label and description
 
@@ -403,14 +448,14 @@ def plot_colors(
             n_dashes = leng_ln if leng_ln < 151 else 150
             all_text += '-' * n_dashes + "\n"
 
-            # Formeatado con f-strings
+            # Formatted with f-strings
             for i, color in enumerate(color_list):
                 all_text += f"{color:<{sp}}"
                 if (i + 1) % ncols == 0:
                     all_text += '\n' if color != color_list[-1] else ''
             all_text += '\n\n\n'
 
-        # Build de Figure showing all text
+        # Build the Figure showing all text
         fig, ax = plt.subplots(figsize=(20, len(all_text.splitlines()) * 0.2))
         ax.set_axis_off()                          # Hide x and y axis
         ax.set_title('Matplotlib colors names by category (color_group)', fontsize=12, fontweight='medium', family="monospace")
@@ -422,25 +467,24 @@ def plot_colors(
     def _get_the_required_search(search):
 
         # Build a big list (most_colors) w/all colors, where we we'll search (except BASE_COLORS, those will be allocated en a dict)
-        base_colors_lst = dic['BASE_COLORS'][0]
-        most_colors_lst = dic['CSS4_COLORS'][0] + dic['TABLEAU_COLORS'][0] + dic['XKCD_COLORS'][0]
-        
-        base_colors_fullname_lst = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'black', 'white']
-        base_colors_dic = dict(zip(base_colors_fullname_lst, base_colors_lst))         # dict(zip(keys, values))
+        base_colors_lst = colors_by_group_dic['BASE_COLORS'][0]
+        most_colors_lst = list(get_named_colors_mapping(include_mcolors=True).keys())
 
-        # Beging the search in the most_color_lst and the base_colors_dic
+        base_colors_fullname_lst = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'black', 'white']
+        base_colors_dic = dict(zip(base_colors_fullname_lst, base_colors_lst))         # dict(zip(keys, values)) {blue: b, green: g, ..., whithe: w}
+
+        # Begin the search in the base_colors_dic and in the most_color_lst of all colors listed in the search: 'find col1 col2 col3...'
         searched_colors_lst = search.split()[1:]        # only the colors (or strings to search for) separating it from the word 'FIND '
-        # found_colors = [color for color in searched_colors_lst if color.lower() in most_colors_lst] # FUTURE
-        colors_lst_tmp = []
+        colors_lst_tmp = []                             # We accumulate sublists with the colors found in the different color groups
         for target in searched_colors_lst:
-            try:                                        # Cause key could not exist in base_colors_dic                                
-                colors_lst_tmp.append(base_colors_dic[target.lower()])
-            except KeyError:
-                pass
-            filtered_colors = list(filter(lambda color: target.lower() in color.lower(), most_colors_lst))
+            # Search for the particular case of base colors which are coded in a single letter
+            target_in_base_colors_tmp = [base_colors_dic[key] for key in base_colors_dic.keys() if target.lower() in key.lower()]
+            colors_lst_tmp.append(target_in_base_colors_tmp.copy())
+            # Search for colors one by one in a complete list (except base colors) generating result sublists that are later flattened into found_colors
+            filtered_colors = [color for color in most_colors_lst if target.lower() in color.lower()]
             colors_lst_tmp.append(filtered_colors.copy())
 
-        found_colors = [color for sublist in colors_lst_tmp for color in sublist]              # color_grp_names_lst to plot. All colors found in a single list of strings
+        found_colors = [color for sublist in colors_lst_tmp for color in sublist]       # color_grp_names_lst to plot. All colors found in a single list of strings
         if not found_colors:
             return ['none']
         else:
@@ -448,34 +492,40 @@ def plot_colors(
 
     # Validate and preprocess palette_group parameter: get the palette_group_key, print lists/names if selected, or fill custom list
     if isinstance(color_group, str):          
-        color_group_key = color_group.strip().upper()
-        if color_group_key == 'NAMES':
-            fig = _show_dic(colors_by_category_dic)
+        color_group_key = color_group.strip().upper()               # Remove leading/trailing whitespace and force string to uppercase              
+        if color_group_key == 'NAMES':                      
+            fig, ax = _show_dic(colors_by_group_dic)
             return fig, ax
-        elif color_group_key.startswith('FIND '):                    # Acá vamos a hacer un jorgitomonteada
+        elif color_group_key.startswith('FIND '):                   # To search color or colors between all colors names
             color_grp_names_lst = _get_the_required_search(color_group_key)   
             color_group_desc = color_group_key
             color_group_key = 'Search request'
-        elif color_group_key not in colors_by_category_dic.keys():
+        elif color_group_key not in colors_by_group_dic.keys():               
             raise ValueError(f"Invalid value for 'palette_group': {repr(color_group)}. Expected one of:" 
-                             "BASE_COLORS', 'CSS4_COLORS', 'TABLEAU_COLORS', 'XKCD_COLORS', 'SAMPLE' (default), 'NAMES'.")
-        else:
+                             "BASE_COLORS', 'CSS4_COLORS', 'TABLEAU_COLORS', 'XKCD_COLORS', 'AUTOMOTIVE_COLORS', 'EDUCATION_COLORS',"
+                             "'FINANCIAL_COLORS', 'PROGRAMMING_COLORS', 'SAMPLE' (default), 'NAMES'.")
+        else:                                                       # The linear case to invoke the native color dictionaries 
             # Get the color_grp_names_lst and color_group_desc of the selected color category (group) - color_group_key
-            color_grp_names_lst, color_group_desc = colors_by_category_dic[color_group_key]
+            color_grp_names_lst, color_group_desc = colors_by_group_dic[color_group_key]
                 
-    elif isinstance(color_group, list):   
-        color_group_key = 'Custom'              # Only for title, no a new entry to de dictionary
-        color_grp_names_lst = color_group      # The list of entered palettes to be shown
+    elif isinstance(color_group, list):             # The case of an ad-hoc list of colors   
+        color_group_key = 'Custom'                  # Only for title, not a new entry to the dictionary
+        color_grp_names_lst = color_group           # The list of entered palettes to be shown
         color_group_desc = 'User selected colors'
     else:
         raise TypeError(f"Invalid type for 'palette_group': {repr(color_group)}. Expected one of: 'str' or 'list'.")
     
-    # Sort colors by hue (tono), saturation, value and name (if sort_colors param id True). Reorder color_list 
+    # Sort colors by hue (tone), saturation, value and name (if sort_colors param is True). Reorder color_list 
     if sort_colors is True:                       
-        color_grp_names_lst = sorted(color_grp_names_lst, key=lambda c: tuple(mcolors.rgb_to_hsv(mcolors.to_rgb(c))))
+        color_grp_names_lst = sorted(color_grp_names_lst, key=lambda c: tuple(mcolors.rgb_to_hsv(mcolors.to_rgb(to_hex(c)))))
 
-    # Buil the fig. with colors and colors names of the selected group: color_group_key: (color_grp_names_lst, color_group_desc)
-    cell_width, cell_height, swatch_width, margin = 212, 22, 48, 12
+    # Build the fig. with colors and colors names of the selected group: color_group_key: (color_grp_names_lst, color_group_desc)
+    cell_width = 245                                    # Default cell width
+    fontsize = 14                                       # Default fontsize for title and color names
+    if hex_value is True:
+        cell_width = 325                                # Expanded color spacing to accommodate text
+        n_cols -= 1                                     # Reduce the number of columns to fit longer text
+    cell_height, swatch_width, margin = 22, 48, 12
 
     nrows = np.ceil(len(color_grp_names_lst) / n_cols)
 
@@ -484,17 +534,16 @@ def plot_colors(
     dpi = 72
 
     fig, ax = plt.subplots(figsize=(width / dpi, height / dpi), dpi=dpi)
-    fig.subplots_adjust(margin/width, margin/height,
-                        (width-margin)/width, (height-margin)/height)
+    fig.subplots_adjust(margin/width, margin/height,(width-margin)/width, (height-margin)/height)
     ax.set_xlim(0, cell_width * n_cols)
     ax.set_ylim(cell_height * (nrows-0.5), -cell_height/2.)
     ax.yaxis.set_visible(False)
     ax.xaxis.set_visible(False)
     ax.set_axis_off()
-    ax.set_title(f"* {color_group_key} ({len(color_grp_names_lst)}).- {color_group_desc}:\n",
-                 fontsize=14, fontweight='bold')
+    ax.set_title(f"* {color_group_key} ({len(color_grp_names_lst)}) (alpha = {alpha}).- {color_group_desc}:\n",
+                 fontsize=fontsize, fontweight='bold')
 
-    for i, color_name in enumerate(color_grp_names_lst):
+    for i, color in enumerate(color_grp_names_lst):
         row = i % nrows
         col = i // nrows
         y = row * cell_height
@@ -502,18 +551,27 @@ def plot_colors(
         swatch_start_x = cell_width * col
         text_pos_x = cell_width * col + swatch_width + 7
 
-        color_label = color_name if hex_value is False else mcolors.to_hex(color_name)
-        ax.text(text_pos_x, y, color_label, fontsize=14, ha='left', va='center')
+        # I'll use the hex_value to plot the color: keep alpha for rgba and (col, alpha) color formats
+        keep_alpha = True if isinstance(color, (tuple, list)) and len(color) == 4 or len(color) == 2 else False   
+
+        color_hex = to_hex(color, keep_alpha=keep_alpha)            # Get hex_value of color                                
+        if isinstance(color, str):                                  # But if color is a native hex_color do NOT convert and reset color_hex w/native hex_color value
+            if color.startswith('#') and len(color[1:]) in (3, 6, 8) and all(c in '1234567890ABCDabcd' for c in color[1:]):
+                color_hex = color                                   # Retain the original hex_value to be independent of the output of .to_hex()
+
+        color_label = color if hex_value is False else f"{color} ({color_hex})"
+        
+        ax.text(text_pos_x, y, color_label, fontsize=fontsize, ha='left', va='center')
 
         ax.add_patch(
-            # Rectangle(xy=(swatch_start_x, y-9), width=swatch_width, height=18, facecolor=(color_name, alpha), edgecolor='0.7')
-            Rectangle(xy=(swatch_start_x, y-9), width=swatch_width, height=18, facecolor=color_name, edgecolor='0.7', alpha=alpha)
+            Rectangle(xy=(swatch_start_x, y-9), width=swatch_width, height=18, facecolor=color_hex, edgecolor='0.7', alpha=alpha)
         )
 
+    plt.show()
     return fig, ax
 
 
-def plot_mpl_palettes(
+def plot_palettes(
         palette_group: Union[str, list[str]] = 'Sample',
         n_colors: Optional[int] = 64,
         continous: Optional[bool] = False
@@ -648,7 +706,7 @@ def plot_mpl_palettes(
         # Iterate over the axes and palette group to plot each palette                                           
         for ax, pltt in zip(axs.flatten(), palette_group_list):
             try:
-                color_list = get_color_hex_list(pltt, n_colors)
+                color_list = get_color_hex_list_from_pltt(pltt, n_colors)
                 ax.bar(sr.index, sr, color=color_list, width=1, edgecolor='white', linewidth=0.2)
                 ax.set_xlim(-0.5, n_colors - 1.5)
                 ax.set_ylim(0, 0.1)
@@ -685,7 +743,7 @@ def plot_mpl_palettes(
 
 
 ## Needed rutines that must be runed here
-#   - Register direct and reversed JM_QUALITATIVE_CMAPS
+#   - Register direct and reversed JM_QUALITATIVE_CMAPS to Matplotlib colormaps in order to matplotlib treat them as native.
 for cmap_name, cmap in JM_QUALITATIVE_CMAPS.items():
     custom_cmap = register_mpl_palette(cmap_name, cmap, len(cmap))      # Get custom_cmap and register direct cmap
     custom_cmap_r = custom_cmap.reversed()                              # Build the reversed cmap (default name: ... + '_r')
