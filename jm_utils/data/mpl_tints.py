@@ -299,7 +299,7 @@ def register_palette_from_color(cmap_name: str, color_name: str):
     return cmap_brand
 
 
-def get_color_hex_list_from_pltt(palette: str, n_colors: Optional[int] = 10) -> list[str]:
+def get_hexcolor_list_from_pltt(palette: str, n_colors: Optional[int] = 10) -> list[str]:
     """
     Returns a list of hex color codes from a specified Matplotlib colormap or a named palette.
 
