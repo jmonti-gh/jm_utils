@@ -223,7 +223,7 @@ CMAP_NAMES_BY_CAT = {
             "gnuplot", "gnuplot_r", "gnuplot2", "gnuplot2_r", "jet", "jet_r", "nipy_spectral", "nipy_spectral_r",
             'ocean', 'ocean_r', "prism", "prism_r", 'terrain', 'terrain_r', 'turbo', 'turbo_r',
             "rainbow", "rainbow_r"
-        ], 'Particular uses for which they have been created. E.G gist_earth, ocean, and terrain for plotting topography'),
+        ], 'Particular uses for which they have been created. E.g. gist_earth, ocean, and terrain for plotting topography'),
         
         "Perceptually Uniform Sequential": ([
             "cividis", "cividis_r", "inferno", "inferno_r", "magma", "magma_r", "plasma", "plasma_r",
@@ -289,6 +289,14 @@ def register_mpl_palette(cmap_name: str, cmap: list, n_bins=256):
         cmap_custom = mcolors.LinearSegmentedColormap.from_list(cmap_name, cmap, N=n_bins)
         plt.colormaps.register(cmap_custom)
         return cmap_custom
+    
+    
+def register_palette_from_color(cmap_name: str, color_name: str):
+    """ Function that build and register a custom from colors names palette (cmap) to Matplotlib """
+    colors = get_named_colors_mapping(include_mcolors=True)
+    colors_lst = [colors[key] for key in colors.keys() if color_name in key]
+    cmap_brand = register_mpl_palette(cmap_name, colors_lst, n_bins=len(colors_lst))
+    return cmap_brand
 
 
 def get_color_hex_list_from_pltt(palette: str, n_colors: Optional[int] = 10) -> list[str]:
