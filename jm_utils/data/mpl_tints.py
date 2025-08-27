@@ -168,6 +168,8 @@ PROGRAMMING_COLORS = {
 
 ## Dictionaries - Own palettes (colormaps) dictionary added (and register) to matplotlib | Similar to 'Accent', 'Set2', 'Tab20', etc
 JM_QUALITATIVE_CMAPS = {
+    "beach_day": ["#001524", "#15616d", "#ffecd1", "#ff7d00", "#78290f", "#004270", "#225860", "#f6ffd1", "#b25800",
+                  "#852202", "#00241d", "#219aad"],    
     'colorblind': ['#0173B2', '#DE8F05', '#029E73', '#D55E00', '#CC78BC', '#CA9161', '#FBAFE4', '#949494', '#ECE133',
                    '#56B4E9', '#5D8C3B', '#A93967', '#888888', '#FFC107', '#7C9680', '#E377C2', '#BCBD22', '#AEC7E8',
                    '#FFBB78', '#98DF8A', '#FF9896', '#C5B0D5', '#C49C94', '#F7B6D2', '#DBDB8D', '#9EDAE5', '#D68E3A',
@@ -178,8 +180,7 @@ JM_QUALITATIVE_CMAPS = {
              "#d3e972", "#66783e", "#9b33c2"],
     "serene": ["#e7ecef", "#274c77", "#6096ba", "#a3cef1", "#8b8c89", "#ffffff", "#374d67", "#6060ba", "#61abe7",
                "#93a372", "#e7efed", "#3a71b1"],
-    "beach_day": ["#001524", "#15616d", "#ffecd1", "#ff7d00", "#78290f", "#004270", "#225860", "#f6ffd1", "#b25800",
-                  "#852202", "#00241d", "#219aad"],
+    'sns': ["#4C72B0", "#DD8452", "#55A868", "#C44E52", "#8172B3", "#937860"],
     "vibrant_summer": ["#ff595e", "#ffca3a", "#8ac926", "#1982c4", "#6a4c93", "#ffa6a8", "#ebc14e", "#28c926", "#105580",
                        "#6736a9", "#ff59c2", "#ffdf87"]
 }
