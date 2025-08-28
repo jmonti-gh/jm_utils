@@ -254,11 +254,11 @@ CMAP_NAMES_BY_CAT = {
         ], 'For representing information that has ordering'),
 
         "Qualitative": ([
-            "Accent", "Accent_r", 'colorblind', 'colorblind_r', "Dark2", "Dark2_r", "neon", "neon_r",
-            "Paired", "Paired_r", "Pastel1", "Pastel1_r", "Pastel2", "Pastel2_r", "neat", "neat_r",
-            "serene", "serene_r", "Set1", "Set1_r", "Set2", "Set2_r", "Set3", "Set3_r",
-            "beach_day", "beach_day_r", "tab10", "tab10_r", "tab20", "tab20_r", "tab20b", "tab20b_r",
-            "tab20c", "tab20c_r", "vibrant_summer", "vibrant_summer_r"
+            "Accent", "Accent_r", "beach_day", "beach_day_r",'colorblind', 'colorblind_r', "Dark2", "Dark2_r",
+            "neon", "neon_r", "Paired", "Paired_r", "Pastel1", "Pastel1_r", "Pastel2", "Pastel2_r",
+            "neat", "neat_r", "serene", "serene_r", "Set1", "Set1_r", "Set2", "Set2_r",
+            "Set3", "Set3_r", 'sns', 'sns_r', "beach_day", "beach_day_r", "tab10", "tab10_r",
+            "tab20", "tab20_r", "tab20b", "tab20b_r", "tab20c", "tab20c_r", "vibrant_summer", "vibrant_summer_r"
         ], 'To represent information which does not have ordering or relationships. Also for categorical data')
 }
 
