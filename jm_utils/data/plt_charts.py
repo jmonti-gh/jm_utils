@@ -777,7 +777,8 @@ if __name__ == "__main__":
     df = pd.DataFrame.from_dict(dic, orient='index', columns=['Stock', 'Obs'])
 
     # Show palettes
-    fig = plt_pie(df['Stock'], scale=4)
+    fig = plt_pie(df['Stock'])
+    fig = plt_pie(df['Stock'], kind='donut', pcts_labels='mixed', palette='sns', title='Stock de teléfonos por modelo')
 
 
 
