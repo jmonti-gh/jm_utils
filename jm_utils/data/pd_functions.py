@@ -214,7 +214,7 @@ def get_fdt(
         dropna: Optional[bool] = True,
         na_position: Optional[str] = 'last',
         include_pcts: Optional[bool] = True,
-        include_flat_relatives: Optional[bool] = True,
+        include_flat_values: Optional[bool] = True,
         fmt_values: Optional[bool] = False,
         order: Optional[str] = 'desc',
         na_aside_calc: Optional[bool] = True,
@@ -364,13 +364,17 @@ def get_fdt(
     if na_aside_calc and not dropna:            # We add nan_columns at the end
         fdt = pd.concat([fdt, nan_row_df])
 
-    # Logic to include: only frequencies, or only flat relatives, or percentage (pcts)
-    if not include_pcts and not include_flat_relatives:
-        fdt = fdt[[columns[0]]]                             # Only 'Frecquency' (col[0]) - doble[[]] to get a DF
-    elif not include_pcts and include_flat_relatives:
-        fdt = fdt[columns[0:4]]                             # 'Frequency' + plain_relative cols (col[0,1,2,3])
-    elif include_pcts and not include_pcts:
-        fdt = fdt[[columns[0], columns[4], columns[5]]]     # 'Frequency' + pcts cols (last two cols)
+    # Logic to include: all values (all columns), only pcts, only flat values, of only frequencies (value counts), or only flat relatives
+    if include_pcts is True and include_flat_values is True:
+        fdt = fdt
+    elif include_pcts is True and include_flat_values is False:
+        fdt = fdt[[columns[0], columns[4], columns[5]]]
+    elif include_pcts is False and include_flat_values is True:
+        fdt = fdt[columns[0:4]]
+    elif include_pcts is False and include_flat_values is False:
+        fdt = fdt[[columns[0]]]
+    else:
+        raise ValueError('Paremeters include_pcts and include_flat_relatives must be bool, True or False')
 
     if fmt_values:
         fdt = fdt.map(_fmt_value_for_pd)

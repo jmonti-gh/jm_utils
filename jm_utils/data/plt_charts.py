@@ -579,7 +579,7 @@ def plt_pareto(
     nulls = data.isna().sum()
 
     # Get de fdt. categories=fdt.index; frequencies=fdt.iloc[:, 0]; relative_pcts=fdt.iloc[:, -2]; cumulative_pcts=fdt.iloc[:, -1]
-    fdt = get_fdt(data, value_counts=value_counts, plain_relatives=False)
+    fdt = get_fdt(data, value_counts=value_counts, include_flat_values=False)
 
     # Calculate figure dimensions
     if figsize is None:
@@ -762,6 +762,7 @@ def plt_pareto(
     ax.set_ylabel(y1_label, fontsize=axis_label_size, color=color1, fontweight='medium')
     ax2.set_ylabel(y2_label, fontsize=axis_label_size, color=color2, fontweight='medium')
 
+    plt.show()
     return fig, (ax, ax2)
 
 
@@ -776,9 +777,12 @@ if __name__ == "__main__":
        '1616 SW': [3, 'Telefonista'], '9611 G': [8, 'Gerencial Gigabit']}
     df = pd.DataFrame.from_dict(dic, orient='index', columns=['Stock', 'Obs'])
 
-    # Show palettes
-    fig = plt_pie(df['Stock'])
-    fig = plt_pie(df['Stock'], kind='donut', pcts_labels='mixed', palette='sns', title='Stock de teléfonos por modelo')
+    # # Show palettes
+    # fig = plt_pie(df['Stock'])
+    # fig = plt_pie(df['Stock'], kind='donut', pcts_labels='mixed', palette='sns', title='Stock de teléfonos por modelo')
+    fig = plt_pareto(df['Stock'], scaled_cumulative=True)
+
+
 
 
 
